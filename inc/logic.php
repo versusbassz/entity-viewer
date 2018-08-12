@@ -40,6 +40,7 @@ function show_metabox($item)
     $ui = [
         'metabox_header' => ucfirst($entity_name) . ' meta',
         'has_serialized_values' => $has_serialized_values,
+        'entity_type' => $entity_name,
     ];
 
     if (in_array($entity_name, ['post', 'comment'])) {
@@ -97,7 +98,7 @@ function render_metabox_full(array $data, array $ui)
 {
     ?>
 
-    <div class="vs-metaviewer-metabox js-metaviewer-metabox">
+    <div class="vs-metaviewer-metabox js-metaviewer-metabox" data-entity-type="<?= $ui['entity_type'] ?>">
 
         <h2 class="vs-metaviewer-metabox__header js-metaviewer-metabox-header"><?= $ui['metabox_header'] ?></h2>
 
@@ -188,6 +189,10 @@ function render_metabox_styles()
     .vs-metaviewer-metabox {
         margin:30px 0;
         background: #fff;
+    }
+
+    .js-metaviewer-metabox-closed .vs-metaviewer-metabox-content {
+        display:none;
     }
 
     .vs-metaviewer-metabox__header {
@@ -316,7 +321,8 @@ function render_metabox_scripts()
         var $content = $metabox.find('.js-metaviewer-metabox-content');
 
         $header.click(function () {
-            $content.toggle();
+            $metabox.toggleClass('js-metaviewer-metabox-closed');
+            handle_open_close_state();
         });
 
         var $data_table = $('.js-metaviewer-data');
@@ -387,6 +393,44 @@ function render_metabox_scripts()
             $pretty_links.attr('data-current-type', previous_type);
             $pretty_links.trigger('click');
         });
+
+        // Saving open/close metabox's state on entities' pages without Metabox API
+        var open_close_cookie_name = 'vs-metaviewer-metabox-closed-for-' + $metabox.attr('data-entity-type');
+        var open_close_cookie_values = ['opened', 'closed'];
+        var open_close_handler_enabled = false;
+        var open_close_handler_was_lauched = false;
+
+        if ($metabox.length) {
+            open_close_handler_enabled = true;
+            handle_open_close_state();
+        }
+
+        function handle_open_close_state() {
+
+            if (! open_close_handler_enabled) {
+                return;
+            }
+
+            var cookie_value = Cookies.get(open_close_cookie_name);
+
+            if (! jQuery.inArray(cookie_value, open_close_cookie_values)) {
+                cookie_value = 'opened';
+                Cookies.set(open_close_cookie_name, 'opened');
+            }
+
+            var current_state = $metabox.hasClass('js-metaviewer-metabox-closed') ? 'closed' : 'opened';
+
+            if (open_close_handler_was_lauched) {
+                Cookies.set(open_close_cookie_name, current_state);
+            } else {
+
+                open_close_handler_was_lauched = true;
+
+                if (current_state !== cookie_value && cookie_value === 'closed') {
+                     $metabox.addClass('js-metaviewer-metabox-closed');
+                }
+            }
+        }
     });
 </script>
 
@@ -448,4 +492,5 @@ function enqueue_scripts()
     }
 
     wp_enqueue_script('vs-jquery-stupid-table-plugin', VS_META_VIEWER_PLUGIN_URL . '/assets/js/stupidtable.min.js', ['jquery'], '1.1.3', true);
+    wp_enqueue_script('vs-cookie', VS_META_VIEWER_PLUGIN_URL . '/assets/js/js.cookie.min.js', [], '2.2.0', true);
 }
