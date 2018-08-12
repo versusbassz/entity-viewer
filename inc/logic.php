@@ -114,6 +114,16 @@ function render_metabox_full(array $data, array $ui)
 
 function render_metabox_data(array $data, array $ui)
 {
+    render_metabox_styles();
+    render_metabox_scripts();
+
+    if (! count($data)) {
+        ?>
+            <div class="vs-not-exists-message">There are no meta fields for this item.</div>
+        <?php
+        return;
+    }
+
     ?>
 
     <table class="vs-table js-metaviewer-data">
@@ -167,205 +177,220 @@ function render_metabox_data(array $data, array $ui)
         </tbody>
     </table>
 
-
-    <style type="text/css">
-        .vs-metaviewer-metabox {
-            margin:30px 0;
-            background: #fff;
-        }
-
-        .vs-metaviewer-metabox__header {
-            margin: 0 0 10px 0;
-            border-bottom: 1px solid #e5e5e5;
-            padding: 8px 20px;
-
-            font-size: 14px;
-            line-height: 1.4;
-        }
-
-        .vs-metaviewer-metabox__header:hover {
-            cursor:pointer;
-        }
-
-        .vs-metaviewer-metabox-content {
-            padding-bottom:10px;
-        }
-
-        .vs-table {
-            margin-left:10px;
-            margin-right:10px;
-            border-collapse: collapse;
-        }
-
-        .vs-table a {
-            text-decoration:none;
-        }
-
-        .vs-table__row {
-            /**/
-        }
-
-        .vs-table__row:hover {
-            background-color:#f0f0f0;
-        }
-
-        .vs-table__column {
-            padding:5px 10px;
-            text-align:left;
-        }
-
-        .vs-table__column_type_th {
-            border-bottom: 1px solid #e1e1e1;
-            font-weight:bold;
-        }
-
-        .table__column_type_th[data-sort] {
-            text-decoration:dashed !important;
-        }
-
-        .table__column_type_th[data-sort]:hover {
-            cursor:pointer;
-        }
-
-        .vs-table__column_type_td {
-            vertical-align:top;
-        }
-
-
-        .vs-table__column_content_umeta-id {
-            min-width:65px;
-        }
-
-        .vs-table__column_content_value {
-            /**/
-        }
-
-        .vs-table__column_content_value pre {
-            margin-top:0;
-            margin-bottom:0;
-        }
-
-        .vs-arrow {
-            margin-left:6px;
-            font-weight:bold;
-
-            border: solid black;
-            border-width: 0 2.3px 2.3px 0;
-            display: inline-block;
-            padding: 2.3px;
-            position:relative;
-            top:-1px;
-        }
-
-        .vs-arrow_dir_up {
-            transform: rotate(-135deg);
-            -webkit-transform: rotate(-135deg);
-        }
-
-        .vs-arrow_dir_down {
-            transform: rotate(45deg);
-            -webkit-transform: rotate(45deg);
-        }
-
-        .vs-pretty-code-button {
-            display: inline-block;
-            border:1px solid #e2e2e2;
-            padding: 0 5px;
-            font-weight: bold;
-
-        }
-        .vs-pretty-code-button:focus {
-            box-shadow:none;
-        }
-
-        .vs-pretty-code-button_activated {
-            /*background-color:#d3ffcb;*/
-            background-color:#e2f9de;
-        }
-    </style>
-
-    <script type="text/javascript">
-		jQuery(document).ready(function($) {
-			var $metabox = $('.js-metaviewer-metabox');
-			var $header = $metabox.find('.js-metaviewer-metabox-header');
-			var $content = $metabox.find('.js-metaviewer-metabox-content');
-
-			$header.click(function () {
-				$content.toggle();
-			});
-
-			var $data_table = $('.js-metaviewer-data');
-
-			var $pretty_links = $data_table.find('.js-pretty-code-button');
-			var $pretty_all_link = $data_table.find('.js-pretty-code-button-all');
-
-			var table = $data_table.stupidtable();
-
-			table.bind('aftertablesort', function (event, data) {
-				var arrow_class = 'vs-arrow';
-
-				var th = $(this).find("th");
-				th.find('.' + arrow_class).remove();
-
-				var dir = $.fn.stupidtable.dir;
-
-				var arrow_dir_class = data.direction === dir.ASC ? "vs-arrow_dir_up" : "vs-arrow_dir_down";
-				th.eq(data.column).append('<span class="' + arrow_class + ' ' + arrow_dir_class + '"></span>');
-			});
-
-			$pretty_links.click(function (e) {
-
-				var types = ['plain', 'pretty'];
-
-				var $target = $( e.target );
-				var prev_type = $target.attr('data-current-type');
-
-				var new_type = types.filter(function(item) {
-					return item !== prev_type;
-				})[0];
-
-				if (new_type === 'pretty') {
-					$target.addClass('vs-pretty-code-button_activated');
-				} else {
-					$target.removeClass('vs-pretty-code-button_activated');
-				}
-
-				$target.attr('data-current-type', new_type);
-
-				var $value_cell = $target.parent().siblings('.vs-table__column_content_value');
-				$value_cell
-					.find('[data-type="' + new_type + '"]')
-					.show()
-					.siblings()
-					.hide();
-			});
-
-			$pretty_all_link.click(function (e) {
-
-				var types = ['plain', 'pretty'];
-
-				var $target = $(e.target);
-				var previous_type = $target.attr('data-current-type');
-
-				var new_type = types.filter(function(item) {
-					return item !== previous_type;
-				})[0];
-
-				if (new_type === 'pretty') {
-					$target.addClass('vs-pretty-code-button_activated');
-				} else {
-					$target.removeClass('vs-pretty-code-button_activated');
-				}
-
-				$target.attr('data-current-type', new_type);
-
-				$pretty_links.attr('data-current-type', previous_type);
-				$pretty_links.trigger('click');
-			});
-		});
-    </script>
-
     <?php
+}
+
+function render_metabox_styles()
+{
+?>
+
+<style type="text/css">
+    .vs-metaviewer-metabox {
+        margin:30px 0;
+        background: #fff;
+    }
+
+    .vs-metaviewer-metabox__header {
+        margin: 0 0 10px 0;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 8px 20px;
+
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .vs-metaviewer-metabox__header:hover {
+        cursor:pointer;
+    }
+
+    .vs-metaviewer-metabox-content {
+        padding: 0 10px 10px;
+    }
+
+    .vs-not-exists-message {
+        padding-left:10px;
+    }
+
+    .vs-table {
+        border-collapse: collapse;
+    }
+
+    .vs-table a {
+        text-decoration:none;
+    }
+
+    .vs-table__row {
+        /**/
+    }
+
+    .vs-table__row:hover {
+        background-color:#f0f0f0;
+    }
+
+    .vs-table__column {
+        padding:5px 10px;
+        text-align:left;
+    }
+
+    .vs-table__column_type_th {
+        border-bottom: 1px solid #e1e1e1;
+        font-weight:bold;
+    }
+
+    .table__column_type_th[data-sort] {
+        text-decoration:dashed !important;
+    }
+
+    .table__column_type_th[data-sort]:hover {
+        cursor:pointer;
+    }
+
+    .vs-table__column_type_td {
+        vertical-align:top;
+    }
+
+
+    .vs-table__column_content_umeta-id {
+        min-width:65px;
+    }
+
+    .vs-table__column_content_value {
+        /**/
+    }
+
+    .vs-table__column_content_value pre {
+        margin-top:0;
+        margin-bottom:0;
+    }
+
+    .vs-arrow {
+        margin-left:6px;
+        font-weight:bold;
+
+        border: solid black;
+        border-width: 0 2.3px 2.3px 0;
+        display: inline-block;
+        padding: 2.3px;
+        position:relative;
+        top:-1px;
+    }
+
+    .vs-arrow_dir_up {
+        transform: rotate(-135deg);
+        -webkit-transform: rotate(-135deg);
+    }
+
+    .vs-arrow_dir_down {
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+
+    .vs-pretty-code-button {
+        display: inline-block;
+        border:1px solid #e2e2e2;
+        padding: 0 5px;
+        font-weight: bold;
+
+    }
+    .vs-pretty-code-button:focus {
+        box-shadow:none;
+    }
+
+    .vs-pretty-code-button_activated {
+        /*background-color:#d3ffcb;*/
+        background-color:#e2f9de;
+    }
+</style>
+
+<?php
+}
+
+function render_metabox_scripts()
+{
+?>
+
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        var $metabox = $('.js-metaviewer-metabox');
+        var $header = $metabox.find('.js-metaviewer-metabox-header');
+        var $content = $metabox.find('.js-metaviewer-metabox-content');
+
+        $header.click(function () {
+            $content.toggle();
+        });
+
+        var $data_table = $('.js-metaviewer-data');
+
+        var $pretty_links = $data_table.find('.js-pretty-code-button');
+        var $pretty_all_link = $data_table.find('.js-pretty-code-button-all');
+
+        var table = $data_table.stupidtable();
+
+        table.bind('aftertablesort', function (event, data) {
+            var arrow_class = 'vs-arrow';
+
+            var th = $(this).find("th");
+            th.find('.' + arrow_class).remove();
+
+            var dir = $.fn.stupidtable.dir;
+
+            var arrow_dir_class = data.direction === dir.ASC ? "vs-arrow_dir_up" : "vs-arrow_dir_down";
+            th.eq(data.column).append('<span class="' + arrow_class + ' ' + arrow_dir_class + '"></span>');
+        });
+
+        $pretty_links.click(function (e) {
+
+            var types = ['plain', 'pretty'];
+
+            var $target = $( e.target );
+            var prev_type = $target.attr('data-current-type');
+
+            var new_type = types.filter(function(item) {
+                return item !== prev_type;
+            })[0];
+
+            if (new_type === 'pretty') {
+                $target.addClass('vs-pretty-code-button_activated');
+            } else {
+                $target.removeClass('vs-pretty-code-button_activated');
+            }
+
+            $target.attr('data-current-type', new_type);
+
+            var $value_cell = $target.parent().siblings('.vs-table__column_content_value');
+            $value_cell
+                .find('[data-type="' + new_type + '"]')
+                .show()
+                .siblings()
+                .hide();
+        });
+
+        $pretty_all_link.click(function (e) {
+
+            var types = ['plain', 'pretty'];
+
+            var $target = $(e.target);
+            var previous_type = $target.attr('data-current-type');
+
+            var new_type = types.filter(function(item) {
+                return item !== previous_type;
+            })[0];
+
+            if (new_type === 'pretty') {
+                $target.addClass('vs-pretty-code-button_activated');
+            } else {
+                $target.removeClass('vs-pretty-code-button_activated');
+            }
+
+            $target.attr('data-current-type', new_type);
+
+            $pretty_links.attr('data-current-type', previous_type);
+            $pretty_links.trigger('click');
+        });
+    });
+</script>
+
+<?php
 }
 
 function construct_meta_data_mapper($meta_id_key, & $has_serialized_values) {
