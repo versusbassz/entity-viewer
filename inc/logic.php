@@ -164,7 +164,7 @@ function render_metabox_data(array $data, array $ui)
                 <td class="vs-table__column vs-table__column_type_td vs-table__column_content_value">
 
                     <div data-type="plain">
-                        <pre>&#39;<?= esc_html($item['value']) ?>&#39;</pre>
+                        <div>&#39;<?= esc_html($item['value']) ?>&#39;</div>
                     </div>
 
                     <?php if ($item['value_pretty']) { ?>
@@ -266,6 +266,11 @@ function render_metabox_styles()
     .vs-table__column_content_value pre {
         margin-top:0;
         margin-bottom:0;
+    }
+
+    .vs-table__column_content_value div {
+        font-family: monospace;
+        word-break: break-all;
     }
 
     .vs-arrow {
