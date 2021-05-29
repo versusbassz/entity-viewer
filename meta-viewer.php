@@ -1,12 +1,12 @@
 <?php
 /*
 Plugin name: VS meta viewer
-Requires PHP: 5.4 // TODO ???
+Requires PHP: 7.3
 */
 
 defined('ABSPATH') || exit;
 
-if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+if (version_compare(PHP_VERSION, '7.3.0', '>=')) {
     add_action('admin_init', 'vs_init_meta_viewer_plugin');
 }
 
