@@ -59,7 +59,7 @@ function register_post_meta_box($post_type)
     }
 
     add_meta_box(
-        'vsmt-post-meta',
+        'vsm-post-meta',
         'Post meta',
         '\\VsMetaViewer\\show_metabox',
         $typenow,
@@ -70,7 +70,7 @@ function register_post_meta_box($post_type)
 function register_comment_meta_box()
 {
     add_meta_box(
-        'vsmt-comment-meta',
+        'vsm-comment-meta',
         'Comment meta',
         '\\VsMetaViewer\\show_metabox',
         'comment',

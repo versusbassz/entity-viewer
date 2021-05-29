@@ -3,37 +3,39 @@
 Plugin name: VS meta viewer
 Requires at least: 5.6.4
 Requires PHP: 7.3
+
+Global PHP prefix: vsm
 */
 
 defined('ABSPATH') || exit;
 
-vs_start_meta_viewer_plugin();
+vsm_start_meta_viewer_plugin();
 
-function vs_start_meta_viewer_plugin() {
+function vsm_start_meta_viewer_plugin() {
 	if (! version_compare(PHP_VERSION, '7.3.0', '>=')) {
-		add_action('admin_notices', 'vs_display_php_requirement_notice_for_meta_viewer_plugin');
+		add_action('admin_notices', 'vsm_display_php_requirement_notice_for_meta_viewer_plugin');
 	}
 
 	global $wp_version;
 
 	if (! version_compare($wp_version, '5.6.4', '>=')) {
-		add_action('admin_notices', 'vs_display_wp_core_requirement_notice_for_meta_viewer_plugin');
+		add_action('admin_notices', 'vsm_display_wp_core_requirement_notice_for_meta_viewer_plugin');
 	}
 
-	add_action('admin_init', 'vs_init_meta_viewer_plugin');
+	add_action('admin_init', 'vsm_init_meta_viewer_plugin');
 }
 
-function vs_display_php_requirement_notice_for_meta_viewer_plugin() {
+function vsm_display_php_requirement_notice_for_meta_viewer_plugin() {
 	$message = 'The plugin "Meta viewer" doesn\'t support your PHP version and doesn\'t get initialized because of that.';
-	vs_display_admin_notice_for_meta_viewer_plugin( $message );
+	vsm_display_admin_notice_for_meta_viewer_plugin( $message );
 }
 
-function vs_display_wp_core_requirement_notice_for_meta_viewer_plugin() {
+function vsm_display_wp_core_requirement_notice_for_meta_viewer_plugin() {
 	$message = 'The plugin "Meta viewer" doesn\'t support your WordPress version and doesn\'t get initialized because of that.';
-	vs_display_admin_notice_for_meta_viewer_plugin( $message );
+	vsm_display_admin_notice_for_meta_viewer_plugin( $message );
 }
 
-function vs_display_admin_notice_for_meta_viewer_plugin($message) {
+function vsm_display_admin_notice_for_meta_viewer_plugin($message) {
 	if (! $message) {
 		return;
 	}
@@ -42,7 +44,7 @@ function vs_display_admin_notice_for_meta_viewer_plugin($message) {
 	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 }
 
-function vs_init_meta_viewer_plugin() {
+function vsm_init_meta_viewer_plugin() {
     require_once dirname(__FILE__) . '/inc/logic.php';
     require_once dirname(__FILE__) . '/init.php';
 }
