@@ -1,0 +1,11 @@
+# Codeception Test Suite Configuration
+
+actor: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser:
+            url: http://example.local
+        - \Helper\Acceptance
+        - REST:
+            depends: PhpBrowser
+            url: http://example.local
