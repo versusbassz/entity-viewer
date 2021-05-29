@@ -1,6 +1,7 @@
 <?php
 /*
 Plugin name: VS meta viewer
+Requires at least: 5.6.4
 Requires PHP: 7.3
 */
 
@@ -13,13 +14,31 @@ function vs_start_meta_viewer_plugin() {
 		add_action('admin_notices', 'vs_display_php_requirement_notice_for_meta_viewer_plugin');
 	}
 
+	global $wp_version;
+
+	if (! version_compare($wp_version, '5.6.4', '>=')) {
+		add_action('admin_notices', 'vs_display_wp_core_requirement_notice_for_meta_viewer_plugin');
+	}
+
 	add_action('admin_init', 'vs_init_meta_viewer_plugin');
 }
 
 function vs_display_php_requirement_notice_for_meta_viewer_plugin() {
-	$class = 'notice notice-error is-dismissible';
-	$message = 'The plugin "Meta viewer" doesn\'t support your PHP version and isn\'t initialized because of that.';
+	$message = 'The plugin "Meta viewer" doesn\'t support your PHP version and doesn\'t get initialized because of that.';
+	vs_display_admin_notice_for_meta_viewer_plugin( $message );
+}
 
+function vs_display_wp_core_requirement_notice_for_meta_viewer_plugin() {
+	$message = 'The plugin "Meta viewer" doesn\'t support your WordPress version and doesn\'t get initialized because of that.';
+	vs_display_admin_notice_for_meta_viewer_plugin( $message );
+}
+
+function vs_display_admin_notice_for_meta_viewer_plugin($message) {
+	if (! $message) {
+		return;
+	}
+
+	$class = 'notice notice-error is-dismissible';
 	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 }
 
