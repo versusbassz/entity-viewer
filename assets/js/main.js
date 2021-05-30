@@ -116,4 +116,43 @@ jQuery(document).ready(function($) {
       }
     }
   }
+
+  // "Search" functionality. See the specification in Wiki on Github.
+  const $search = $('.js-vsm-search');
+  const $search_reset = $('.js-vsm-search-reset');
+  const $rows = $('.js-metaviewer-data').find('.js-vsm-data-row');
+
+  $search.change(handleSearchChange);
+  $search.keyup(handleSearchChange);
+
+  function handleSearchChange(e) {
+    const $input = $(e.target);
+    const query = $input.val();
+
+    query ? $search_reset.show() : $search_reset.hide();
+
+    if (! query) {
+      $rows.show();
+      return;
+    }
+
+    $rows.each((index, element) => {
+      const $row = $(element);
+      $row.text().toLowerCase().includes(query.toLowerCase()) ? $row.show() : $row.hide();
+    });
+  }
+
+  // Disable sending a form on pressed Enter in "Search" input
+  $search.keypress((e) => {
+    if (e.which == 13)  {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  // Reset "Search" input on "Reset" button click
+  $search_reset.click(() => {
+    $search.val('');
+    $search.trigger('change')
+  });
 });

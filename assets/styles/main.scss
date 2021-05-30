@@ -28,6 +28,14 @@
     padding-left:10px;
 }
 
+.vsm-search {
+    margin: 10px 0 4px;
+
+    &__input {
+        max-width: 150px;
+    }
+}
+
 .vs-table {
     border-collapse: collapse;
 

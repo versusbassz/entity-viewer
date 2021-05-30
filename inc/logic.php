@@ -125,6 +125,11 @@ function render_metabox_data(array $data, array $ui)
     }
     ?>
 
+    <div class="vsm-search">
+        <input type="text" class="vsm-search__input js-vsm-search" placeholder="Search" />
+        <button type="button" class="vsm-search__reset button-secondary js-vsm-search-reset" style="display: none;">Reset</button>
+    </div>
+
     <table class="vs-table js-metaviewer-data">
         <thead>
         <tr>
@@ -144,7 +149,7 @@ function render_metabox_data(array $data, array $ui)
         </thead>
         <tbody>
         <?php foreach ($data as $item) { ?>
-            <tr class="vs-table__row">
+            <tr class="vs-table__row js-vsm-data-row">
                 <td class="vs-table__column vs-table__column_type_td"><?= esc_html($item['id']) ?></td>
                 <td class="vs-table__column vs-table__column_type_td"><?= esc_html($item['key']) ?></td>
 
