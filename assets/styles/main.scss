@@ -1,0 +1,123 @@
+.vs-metaviewer-metabox {
+    margin:30px 0;
+    background: #fff;
+
+    &__header {
+        margin: 0 0 10px 0;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 8px 20px;
+
+        font-size: 14px;
+        line-height: 1.4;
+
+        &:hover {
+            cursor:pointer;
+        }
+    }
+}
+
+.vs-metaviewer-metabox-content {
+    padding: 0 10px 10px;
+}
+
+.js-metaviewer-metabox-closed .vs-metaviewer-metabox-content {
+    display:none;
+}
+
+.vs-not-exists-message {
+    padding-left:10px;
+}
+
+.vs-table {
+    border-collapse: collapse;
+
+    a {
+        text-decoration:none;
+    }
+
+    &__row {
+        &:hover {
+            background-color:#f0f0f0;
+        }
+    }
+
+    &__column {
+        padding:5px 10px;
+        text-align:left;
+
+        &_type_th {
+            border-bottom: 1px solid #e1e1e1;
+            font-weight:bold;
+        }
+
+        &_type_td {
+            vertical-align:top;
+        }
+    }
+
+    &__column_content {
+        &_umeta-id {
+            min-width:65px;
+        }
+
+        &_value {
+            pre {
+                margin-top:0;
+                margin-bottom:0;
+            }
+
+            div {
+                font-family: monospace;
+                word-break: break-all;
+            }
+        }
+    }
+}
+
+.table__column_type_th[data-sort] {
+    text-decoration:dashed !important;
+}
+
+.table__column_type_th[data-sort]:hover {
+    cursor:pointer;
+}
+
+.vs-arrow {
+    margin-left:6px;
+    font-weight:bold;
+
+    border: solid black;
+    border-width: 0 2.3px 2.3px 0;
+    display: inline-block;
+    padding: 2.3px;
+    position:relative;
+    top:-1px;
+
+    &_dir {
+        &_up {
+            transform: rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
+        }
+
+        &_down {
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+        }
+    }
+}
+
+.vs-pretty-code-button {
+    display: inline-block;
+    border:1px solid #e2e2e2;
+    padding: 0 5px;
+    font-weight: bold;
+
+    &:focus {
+        box-shadow:none;
+    }
+
+    &_activated {
+        /*background-color:#d3ffcb;*/
+        background-color:#e2f9de;
+    }
+}
