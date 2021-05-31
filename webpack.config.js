@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 // eslint-disable-next-line no-unused-vars
 module.exports = (env, argv) => {
-  const isModeProduction = env.mode === 'production';
+  const isModeProduction = argv.mode === 'production';
 
   const mode = isModeProduction ? 'production' : 'development';
   console.log(`[META-VIEWER] Webpack mode = ${mode}`);
