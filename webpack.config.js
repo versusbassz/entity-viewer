@@ -25,6 +25,7 @@ module.exports = (env, argv) => {
     output: {
       filename: 'meta-viewer.build.js',
       path: path.resolve(__dirname, 'assets/build'),
+      clean: true,
     },
     devtool: sourceMaps,
     module: {
