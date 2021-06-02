@@ -19,5 +19,8 @@
     "presets": [
       "@babel/preset-env"
     ]
-  }
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }
