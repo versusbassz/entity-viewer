@@ -1,9 +1,15 @@
 {
   "private": false,
-  "dependencies": {},
+  "dependencies": {
+    "js-cookie": "^2.2.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
   "devDependencies": {
+    "@babel/cli": "^7.14.3",
     "@babel/core": "^7.14.3",
     "@babel/preset-env": "^7.14.4",
+    "@babel/preset-react": "^7.13.13",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.2.6",
     "node-sass": "^6.0.0",
@@ -17,7 +23,8 @@
   },
   "babel": {
     "presets": [
-      "@babel/preset-env"
+      "@babel/preset-env",
+      "@babel/preset-react"
     ]
   },
   "browserslist": [

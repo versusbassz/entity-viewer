@@ -244,6 +244,5 @@ function enqueue_scripts()
         return;
     }
 
-    wp_enqueue_script('vs-jquery-stupid-table-plugin', VS_META_VIEWER_PLUGIN_URL . '/assets/js/stupidtable.min.js', ['jquery'], '1.1.3', true);
-    wp_enqueue_script('vs-cookie', VS_META_VIEWER_PLUGIN_URL . '/assets/js/js.cookie.min.js', [], '2.2.0', true);
+    // TODO maybe add styles for the metabox here
 }
