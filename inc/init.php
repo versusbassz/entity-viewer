@@ -5,8 +5,6 @@ if (! is_admin() || wp_doing_ajax() || ! current_user_can('manage_options')) {
     return;
 }
 
-define('VS_META_VIEWER_PLUGIN_URL', plugins_url('', __FILE__));
-
 // post
 add_action('add_meta_boxes', '\\VsMetaViewer\\register_post_meta_box', 1000, 1);
 

@@ -123,7 +123,7 @@ function render_metabox_data(array $data, array $ui)
 
 function render_metabox_scripts()
 {
-	$url = VS_META_VIEWER_PLUGIN_URL . '/assets/build/meta-viewer.build.js';
+	$url = plugins_url('assets/build/meta-viewer.build.js', __DIR__);
 	echo sprintf('<script type="text/javascript" src="%s"></script>', esc_attr($url));
 }
 

@@ -45,6 +45,6 @@ function vsm_display_admin_notice($message) {
 }
 
 function vsm_init_plugin() {
-    require_once dirname(__FILE__) . '/inc/logic.php';
-    require_once dirname(__FILE__) . '/init.php';
+    require_once __DIR__ . '/inc/logic.php';
+    require_once __DIR__ . '/inc/init.php';
 }
