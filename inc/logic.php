@@ -117,6 +117,13 @@ function render_metabox_data(array $data, array $ui)
 {
     add_action('admin_footer', '\\VsMetaViewer\\render_metabox_scripts', 200);
 
+    echo '<div id="js-vsm-metabox"></div>';
+//    return;
+
+
+    echo '<div style="margin: 40px 0;"><hr /></div>';
+
+
     if (! count($data)) {
         ?>
             <div class="vs-not-exists-message">There are no meta fields for this item.</div>

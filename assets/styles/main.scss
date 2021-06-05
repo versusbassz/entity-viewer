@@ -53,6 +53,12 @@
         padding:5px 10px;
         text-align:left;
 
+        &_sortable {
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
         &_type_th {
             border-bottom: 1px solid #e1e1e1;
             font-weight:bold;
@@ -80,14 +86,6 @@
             }
         }
     }
-}
-
-.table__column_type_th[data-sort] {
-    text-decoration:dashed !important;
-}
-
-.table__column_type_th[data-sort]:hover {
-    cursor:pointer;
 }
 
 .vs-arrow {
@@ -122,6 +120,10 @@
 
     &:focus {
         box-shadow:none;
+    }
+
+    &:hover {
+        cursor: pointer;
     }
 
     &_activated {

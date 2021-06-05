@@ -1,6 +1,15 @@
 import Cookies from "js-cookie";
-import "../styles/main.scss";
+import React from "react";
+import ReactDOM from "react-dom";
 
+import "../styles/main.scss";
+import { Metabox } from "./Metabox";
+
+window.addEventListener('DOMContentLoaded', () => {
+  ReactDOM.render(<Metabox />, document.getElementById("js-vsm-metabox"));
+});
+
+// TODO transform to React logic and remove
 jQuery(document).ready(function($) {
   const $metabox = $('.js-metaviewer-metabox');
   const $header = $metabox.find('.js-metaviewer-metabox-header');
