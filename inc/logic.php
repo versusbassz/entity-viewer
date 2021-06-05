@@ -37,17 +37,23 @@ function show_metabox($item)
         $meta_raw
     );
 
-    $ui = [
+    $data = [
+        'metabox_type' => in_array($entity_name, ['post', 'comment']) ? 'content' : 'full',
         'metabox_header' => ucfirst($entity_name) . ' meta',
         'has_serialized_values' => $has_serialized_values,
         'entity_type' => $entity_name,
+        'fields' => $meta
     ];
 
-    if (in_array($entity_name, ['post', 'comment'])) {
-        render_metabox_data($meta, $ui);
-    } else {
-        render_metabox_full($meta, $ui);
-    }
+    render_metabox($data);
+}
+
+function render_metabox(array $data)
+{
+	add_action('admin_footer', '\\VsMetaViewer\\render_metabox_scripts', 200);
+
+	echo '<div id="js-vsm-metabox"></div>';
+	echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s"></div>', esc_attr(json_encode($data)));
 }
 
 function register_post_meta_box($post_type)
@@ -92,33 +98,6 @@ function register_term_meta_box() {
     if ($pagenow === 'term.php' && $taxnow) {
         add_action("{$taxnow}_edit_form", '\\VsMetaViewer\\show_metabox', 1000, 2);
     }
-}
-
-function render_metabox_full(array $data, array $ui)
-{
-    ?>
-
-    <div class="vs-metaviewer-metabox js-metaviewer-metabox" data-entity-type="<?= $ui['entity_type'] ?>">
-
-        <h2 class="vs-metaviewer-metabox__header js-metaviewer-metabox-header"><?= $ui['metabox_header'] ?></h2>
-
-        <div class="vs-metaviewer-metabox-content js-metaviewer-metabox-content">
-
-            <?php render_metabox_data($data, $ui); ?>
-
-        </div>
-
-    </div>
-
-    <?php
-}
-
-function render_metabox_data(array $data, array $ui)
-{
-    add_action('admin_footer', '\\VsMetaViewer\\render_metabox_scripts', 200);
-
-    echo '<div id="js-vsm-metabox"></div>';
-    echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s"></div>', esc_attr(json_encode($data)));
 }
 
 function render_metabox_scripts()

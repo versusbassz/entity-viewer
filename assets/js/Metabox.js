@@ -1,15 +1,53 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import { dynamicSort } from "./utils";
 
-export const Metabox = () => {
-  const [fields, setFields] = useState([]);
-  const serializedFields = fields.filter((item) => item.value_pretty);
+export const Metabox = ({data}) => {
+  return (
+    data.metabox_type === "full" ? (
+      <MetaboxFull data={data} />
+    ) : (
+      <MetaboxContent fields={data.fields} />
+    )
+  );
+};
+
+export const MetaboxFull = ({data}) => {
+  const statusValues = ['opened', 'closed'];
+  const cookieName =  'vsm-metabox-status--' + data['entity_type'];
+
+  const [status, setStatus] = useState("opened");
 
   useEffect(() => {
-    const jsonData = document.getElementById('js-vsm-fields-data').value;
-    const dataParsed = JSON.parse(jsonData);
-    setFields(dataParsed);
-  }, [])
+    const savedStatus = Cookies.get(cookieName);
+
+    if (savedStatus && statusValues.includes(savedStatus)) {
+      setStatus(savedStatus);
+    }
+  }, []);
+
+  useEffect(() => {
+    Cookies.set(cookieName, status, {expires: 7});
+  }, [status]);
+
+  const contentClasses = ["vsm-metabox__content"];
+  status === "closed" && contentClasses.push("vsm-metabox__content_closed");
+
+  const toggleStatus = () => setStatus(status === "opened" ? "closed" : "opened");
+
+  return (
+    <div className="vsm-metabox">
+      <h2 className="vsm-metabox__header" onClick={toggleStatus}>{data.metabox_header}</h2>
+
+      <div className={contentClasses.join(" ")}>
+        <MetaboxContent fields={data.fields} />
+      </div>
+    </div>
+  );
+};
+
+export const MetaboxContent = ({fields}) => {
+  const serializedFields = fields.filter((item) => item.value_pretty);
 
   const [ ui, setUI ] = useState({
     showPrettifyAllButton: true,

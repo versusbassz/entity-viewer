@@ -1,4 +1,4 @@
-.vs-metaviewer-metabox {
+.vsm-metabox {
     margin:30px 0;
     background: #fff;
 
@@ -14,10 +14,14 @@
             cursor:pointer;
         }
     }
-}
 
-.vs-metaviewer-metabox-content {
-    padding: 0 10px 10px;
+    &__content {
+        padding: 0 10px 10px;
+
+        &_closed {
+            display: none;
+        }
+    }
 }
 
 .vs-message {
