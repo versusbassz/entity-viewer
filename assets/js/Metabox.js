@@ -168,7 +168,7 @@ export const MetaboxContent = ({fields}) => {
               </th>
 
               <th className="vs-table__column table__column_type_th">
-                {ui.showPrettifyAllButton && (
+                {ui.showPrettifyAllButton && !! serializedFields.length && (
                   <ToggleButton
                     onClick={() => toggleAllFieldsPretty(allFieldsPretty)}
                     enabled={allFieldsPretty}
