@@ -109,7 +109,7 @@ export const MetaboxContent = ({fields}) => {
       let contains = false;
 
       ['id', 'key', 'value'].forEach((field_name) => {
-        let value = Number.isInteger(field[field_name]) ? field[field_name].toString(10) : field[field_name];
+        let value = Number.isInteger(field[field_name]) ? field[field_name].toString(10) : String(field[field_name]);
 
         if (! contains && value.toLowerCase().includes(ui.search.toLowerCase())) {
           contains = true;
