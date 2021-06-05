@@ -36,7 +36,8 @@ export const Metabox = () => {
     sorting: {
       column: "id",
       dir: "asc",
-    }
+    },
+    search: "",
   });
 
   const [ prettyFields, setPrettyFields ] = useState([]);
@@ -82,80 +83,121 @@ export const Metabox = () => {
   }
 
   const orderSign = ui.sorting.dir.toLowerCase() === "asc" ? "" : "-";
-  const fieldsSorted = [...fields].sort(dynamicSort(`${orderSign}${ui.sorting.column}`));
+  let fieldsSorted = [...fields].sort(dynamicSort(`${orderSign}${ui.sorting.column}`));
+
+  // Search logic
+  if (ui.search) {
+    fieldsSorted = fieldsSorted.filter((field) => {
+      let contains = false;
+
+      ['id', 'key', 'value'].forEach((field_name) => {
+        let value = Number.isInteger(field[field_name]) ? field[field_name].toString(10) : field[field_name];
+
+        if (! contains && value.toLowerCase().includes(ui.search.toLowerCase())) {
+          contains = true;
+        }
+      });
+
+      return contains;
+    });
+  }
 
   return (
     <>
       <div className="vsm-search">
-        <input type="text" className="vsm-search__input js-vsm-search" placeholder="Search" />
-        <button type="button" className="vsm-search__reset button-secondary js-vsm-search-reset" style={{display: "none"}}>Reset</button>
+        <input
+          type="text"
+          className="vsm-search__input"
+          placeholder="Search"
+          value={ui.search}
+          onChange={(e) => {
+            e.preventDefault();
+            setUI({...ui, ...{search: e.target.value}});
+          }}
+          onKeyPress={(e) => {
+            if (e.which == 13)  {
+              e.preventDefault();
+              return false;
+            }
+          }}
+        />
+        <button
+          type="button"
+          className="button-secondary vsm-search__reset"
+          style={ui.search ? {} : {display: "none"}}
+          onClick={() => setUI({...ui, ...{search:""}})}
+        >Reset</button>
       </div>
 
-      <table className="vs-table js-metaviewer-data">
-        <thead>
-          <tr>
-            <th
-              className="vs-table__column vs-table__column_sortable vs-table__column_content_umeta-id"
-              onClick={() => sortFields("id")}
-            >
-              Meta id
-              <SortingArrow show={ui.sorting.column === "id"} dir={ui.sorting.dir} />
-            </th>
+      {fieldsSorted.length ? (
+        <table className="vs-table">
+          <thead>
+            <tr>
+              <th
+                className="vs-table__column vs-table__column_sortable vs-table__column_content_umeta-id"
+                onClick={() => sortFields("id")}
+              >
+                Meta id
+                <SortingArrow show={ui.sorting.column === "id"} dir={ui.sorting.dir} />
+              </th>
 
-            <th
-              className="vs-table__column vs-table__column_sortable"
-              onClick={() => sortFields("key")}
-            >
-              Key
-              <SortingArrow show={ui.sorting.column === "key"} dir={ui.sorting.dir} />
-            </th>
+              <th
+                className="vs-table__column vs-table__column_sortable"
+                onClick={() => sortFields("key")}
+              >
+                Key
+                <SortingArrow show={ui.sorting.column === "key"} dir={ui.sorting.dir} />
+              </th>
 
-            <th className="vs-table__column table__column_type_th">
-              {ui.showPrettifyAllButton && (
-                <ToggleButton
-                  onClick={() => toggleAllFieldsPretty(allFieldsPretty)}
-                  enabled={allFieldsPretty}
-                />
-              )}
-            </th>
-            <th className="vs-table__column table__column_type_th">Value</th>
-          </tr>
-        </thead>
+              <th className="vs-table__column table__column_type_th">
+                {ui.showPrettifyAllButton && (
+                  <ToggleButton
+                    onClick={() => toggleAllFieldsPretty(allFieldsPretty)}
+                    enabled={allFieldsPretty}
+                  />
+                )}
+              </th>
+              <th className="vs-table__column table__column_type_th">Value</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {fieldsSorted.map((item) => {
-            const valueType = prettyFields.includes(item.id) ? "pretty" : "plain";
+          <tbody>
+            {fieldsSorted.map((item) => {
+              const valueType = prettyFields.includes(item.id) ? "pretty" : "plain";
 
-            return (
-              <tr key={item.id.toString()} className="vs-table__row js-vsm-data-row">
-                <td className="vs-table__column vs-table__column_type_td">{item.id}</td>
-                <td className="vs-table__column vs-table__column_type_td">{item.key}</td>
+              return (
+                <tr key={item.id.toString()} className="vs-table__row">
+                  <td className="vs-table__column vs-table__column_type_td">{item.id}</td>
+                  <td className="vs-table__column vs-table__column_type_td">{item.key}</td>
 
-                <td className="vs-table__column vs-table__column_type_td">
-                  {item.value_pretty && (
-                    <ToggleButton
-                      onClick={() => togglePrettyRow(item.id)}
-                      enabled={prettyFields.includes(item.id)}
-                    />
-                  )}
-                </td>
+                  <td className="vs-table__column vs-table__column_type_td">
+                    {item.value_pretty && (
+                      <ToggleButton
+                        onClick={() => togglePrettyRow(item.id)}
+                        enabled={prettyFields.includes(item.id)}
+                      />
+                    )}
+                  </td>
 
-                <td className="vs-table__column vs-table__column_type_td vs-table__column_content_value">
-                  {valueType === "pretty" ? (
-                    <div datatype="pretty">
-                      <pre>{item.value_pretty}</pre>
-                    </div>
-                  ) : (
-                    <div datatype="plain">
-                      <div>&#39;{item.value}&#39;</div>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  <td className="vs-table__column vs-table__column_type_td vs-table__column_content_value">
+                    {valueType === "pretty" ? (
+                      <div datatype="pretty">
+                        <pre>{item.value_pretty}</pre>
+                      </div>
+                    ) : (
+                      <div datatype="plain">
+                        <div>&#39;{item.value}&#39;</div>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      ) : (
+        <div className="vs-message vs-message_type_not-found">There are no meta fields for this search query.</div>
+      )}
     </>
   );
 }

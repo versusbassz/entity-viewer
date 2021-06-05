@@ -20,12 +20,14 @@
     padding: 0 10px 10px;
 }
 
-.js-metaviewer-metabox-closed .vs-metaviewer-metabox-content {
-    display:none;
-}
-
 .vs-not-exists-message {
     padding-left:10px;
+}
+
+.vs-message {
+    &_type_not-found {
+        padding: 5px;
+    }
 }
 
 .vsm-search {
@@ -33,6 +35,10 @@
 
     &__input {
         max-width: 150px;
+    }
+
+    &__reset {
+        margin-left: 6px !important;
     }
 }
 
@@ -115,8 +121,10 @@
 .vs-pretty-code-button {
     display: inline-block;
     border:1px solid #e2e2e2;
-    padding: 0 5px;
+    padding: 2px 5px;
     font-weight: bold;
+    color: #2271b1;
+    background-color: #fff;
 
     &:focus {
         box-shadow:none;
