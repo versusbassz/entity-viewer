@@ -20,13 +20,15 @@
     padding: 0 10px 10px;
 }
 
-.vs-not-exists-message {
-    padding-left:10px;
-}
-
 .vs-message {
-    &_type_not-found {
-        padding: 5px;
+    &_type {
+        &_not-exists {
+            margin-top: 14px;
+        }
+
+        &_not-found {
+            padding-left: 5px;
+        }
     }
 }
 

@@ -1,4 +1,7 @@
 {
+    "require": {
+        "ext-json": "*"
+    },
     "require-dev": {
         "lucatume/wp-browser": "^3.0"
     }

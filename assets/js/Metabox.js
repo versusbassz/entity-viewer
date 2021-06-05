@@ -1,35 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { dynamicSort } from "./utils";
 
 export const Metabox = () => {
-
-  const [fields, setFields] = useState([
-    {
-      id: 1,
-      key: 'key1',
-      value: 'value1',
-      value_pretty: null,
-    },
-    {
-      id: 2,
-      key: 'key2',
-      value: 'value2',
-      value_pretty: null,
-    },
-    {
-      id: 3,
-      key: 'zkey3',
-      value: 'value3',
-      value_pretty: 'value3-pretty',
-    },
-    {
-      id: 4,
-      key: 'key4',
-      value: 'value4',
-      value_pretty: 'value4-pretty',
-    },
-  ]);
+  const [fields, setFields] = useState([]);
   const serializedFields = fields.filter((item) => item.value_pretty);
+
+  useEffect(() => {
+    const jsonData = document.getElementById('js-vsm-fields-data').value;
+    const dataParsed = JSON.parse(jsonData);
+    setFields(dataParsed);
+  }, [])
 
   const [ ui, setUI ] = useState({
     showPrettifyAllButton: true,
@@ -78,7 +58,7 @@ export const Metabox = () => {
 
   if (! fields.length) {
     return (
-      <div className="vs-not-exists-message">There are no meta fields for this item.</div>
+      <div className="vs-message vs-message_type_not-exists">There are no meta fields for this item.</div>
     );
   }
 

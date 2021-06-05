@@ -118,7 +118,7 @@ function render_metabox_data(array $data, array $ui)
     add_action('admin_footer', '\\VsMetaViewer\\render_metabox_scripts', 200);
 
     echo '<div id="js-vsm-metabox"></div>';
-//    return;
+    echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s"></div>', esc_attr(json_encode($data)));
 
 
     echo '<div style="margin: 40px 0;"><hr /></div>';
