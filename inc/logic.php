@@ -119,7 +119,7 @@ function construct_meta_data_mapper($meta_id_key, & $has_serialized_values) {
         }
 
         return [
-            'id' => $item[$meta_id_key],
+            'id' => (int) $item[$meta_id_key],
             'key' => $item['meta_key'],
             'value_pretty' => $value_pretty,
             'value' => $item['meta_value'],
