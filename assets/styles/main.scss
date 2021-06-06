@@ -24,7 +24,7 @@
     }
 }
 
-.vs-message {
+.vsm-message {
     &_type {
         &_not-exists {
             margin-top: 14px;
@@ -48,7 +48,7 @@
     }
 }
 
-.vs-table {
+.vsm-table {
     border-collapse: collapse;
 
     a {
@@ -100,7 +100,7 @@
     }
 }
 
-.vs-arrow {
+.vsm-arrow {
     margin-left:6px;
     font-weight:bold;
 
@@ -124,7 +124,7 @@
     }
 }
 
-.vs-pretty-code-button {
+.vsm-pretty-code-button {
     display: inline-block;
     border:1px solid #e2e2e2;
     padding: 2px 5px;

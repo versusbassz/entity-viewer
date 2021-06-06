@@ -96,7 +96,7 @@ export const MetaboxContent = ({fields}) => {
 
   if (! fields.length) {
     return (
-      <div className="vs-message vs-message_type_not-exists">There are no meta fields for this item.</div>
+      <div className="vsm-message vsm-message_type_not-exists">There are no meta fields for this item.</div>
     );
   }
 
@@ -148,11 +148,11 @@ export const MetaboxContent = ({fields}) => {
       </div>
 
       {fieldsSorted.length ? (
-        <table className="vs-table">
+        <table className="vsm-table">
           <thead>
             <tr>
               <th
-                className="vs-table__column vs-table__column_sortable vs-table__column_content_umeta-id"
+                className="vsm-table__column vsm-table__column_sortable vsm-table__column_content_umeta-id"
                 onClick={() => sortFields("id")}
               >
                 Meta id
@@ -160,14 +160,14 @@ export const MetaboxContent = ({fields}) => {
               </th>
 
               <th
-                className="vs-table__column vs-table__column_sortable"
+                className="vsm-table__column vsm-table__column_sortable"
                 onClick={() => sortFields("key")}
               >
                 Key
                 <SortingArrow show={ui.sorting.column === "key"} dir={ui.sorting.dir} />
               </th>
 
-              <th className="vs-table__column table__column_type_th">
+              <th className="vsm-table__column table__column_type_th">
                 {ui.showPrettifyAllButton && !! serializedFields.length && (
                   <ToggleButton
                     onClick={() => toggleAllFieldsPretty(allFieldsPretty)}
@@ -175,7 +175,7 @@ export const MetaboxContent = ({fields}) => {
                   />
                 )}
               </th>
-              <th className="vs-table__column table__column_type_th">Value</th>
+              <th className="vsm-table__column table__column_type_th">Value</th>
             </tr>
           </thead>
 
@@ -184,11 +184,11 @@ export const MetaboxContent = ({fields}) => {
               const valueType = prettyFields.includes(item.id) ? "pretty" : "plain";
 
               return (
-                <tr key={item.id.toString()} className="vs-table__row">
-                  <td className="vs-table__column vs-table__column_type_td">{item.id}</td>
-                  <td className="vs-table__column vs-table__column_type_td">{item.key}</td>
+                <tr key={item.id.toString()} className="vsm-table__row">
+                  <td className="vsm-table__column vsm-table__column_type_td">{item.id}</td>
+                  <td className="vsm-table__column vsm-table__column_type_td">{item.key}</td>
 
-                  <td className="vs-table__column vs-table__column_type_td">
+                  <td className="vsm-table__column vsm-table__column_type_td">
                     {item.value_pretty && (
                       <ToggleButton
                         onClick={() => togglePrettyRow(item.id)}
@@ -197,7 +197,7 @@ export const MetaboxContent = ({fields}) => {
                     )}
                   </td>
 
-                  <td className="vs-table__column vs-table__column_type_td vs-table__column_content_value">
+                  <td className="vsm-table__column vsm-table__column_type_td vsm-table__column_content_value">
                     {valueType === "pretty" ? (
                       <div datatype="pretty">
                         <pre>{item.value_pretty}</pre>
@@ -214,15 +214,15 @@ export const MetaboxContent = ({fields}) => {
           </tbody>
         </table>
       ) : (
-        <div className="vs-message vs-message_type_not-found">There are no meta fields for this search query.</div>
+        <div className="vsm-message vsm-message_type_not-found">There are no meta fields for this search query.</div>
       )}
     </>
   );
 }
 
 const ToggleButton = ({onClick, enabled}) => {
-  let classes = ["vs-pretty-code-button"];
-  if (enabled) classes.push("vs-pretty-code-button_activated");
+  let classes = ["vsm-pretty-code-button"];
+  if (enabled) classes.push("vsm-pretty-code-button_activated");
 
   return (<button type="button" className={classes.join(" ")} onClick={onClick}>{"{}"}</button>);
 };
@@ -232,8 +232,8 @@ const SortingArrow = ({show, dir}) => {
     return null;
   }
 
-  const classes = ["vs-arrow"];
-  classes.push(dir === "asc" ? "vs-arrow_dir_up" : "vs-arrow_dir_down")
+  const classes = ["vsm-arrow"];
+  classes.push(dir === "asc" ? "vsm-arrow_dir_up" : "vsm-arrow_dir_down")
 
   return (
     <span className={classes.join(" ")} />
