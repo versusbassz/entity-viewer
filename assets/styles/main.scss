@@ -87,15 +87,23 @@
         }
 
         &_value {
+        }
+    }
+}
+
+.vsm-value {
+    &_type {
+        &_pretty {
             pre {
                 margin-top:0;
                 margin-bottom:0;
+                white-space: pre-wrap;
             }
+        }
 
-            div {
-                font-family: monospace;
-                word-break: break-all;
-            }
+        &_plain {
+            font-family: monospace;
+            word-break: break-all;
         }
     }
 }

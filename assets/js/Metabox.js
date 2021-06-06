@@ -199,12 +199,12 @@ export const MetaboxContent = ({fields}) => {
 
                   <td className="vsm-table__column vsm-table__column_type_td vsm-table__column_content_value">
                     {valueType === "pretty" ? (
-                      <div datatype="pretty">
+                      <div className="vsm-value_type_pretty">
                         <pre>{item.value_pretty}</pre>
                       </div>
                     ) : (
-                      <div datatype="plain">
-                        <div>&#39;{item.value}&#39;</div>
+                      <div className="vsm-value_type_plain">
+                        &#39;{item.value}&#39;
                       </div>
                     )}
                   </td>
