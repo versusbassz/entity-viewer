@@ -53,7 +53,7 @@ function render_metabox(array $data)
 	add_action('admin_footer', '\\VsMetaViewer\\render_metabox_scripts', 200);
 
 	echo '<div id="js-vsm-metabox"></div>';
-	echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s"></div>', esc_attr(json_encode($data)));
+	echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s" />', esc_attr(json_encode($data)));
 }
 
 function register_post_meta_box($post_type)
