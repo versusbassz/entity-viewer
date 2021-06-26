@@ -80,7 +80,7 @@ function handle_refreshing_data_via_ajax()
         die();
     };
 
-    if (! current_user_can('manage_options')) {
+    if (! current_user_can(VSM_DEFAULT_CAPABILITY)) {
         $send_response((new \WP_Error("access_restricted", "Access restricted.")));
     }
 

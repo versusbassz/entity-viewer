@@ -1,7 +1,9 @@
 <?php
 defined('ABSPATH') || exit;
 
-if (! is_admin() || ! current_user_can('manage_options')) {
+define('VSM_DEFAULT_CAPABILITY', 'delete_users');
+
+if (! is_admin() || ! current_user_can(VSM_DEFAULT_CAPABILITY)) {
     return;
 }
 
