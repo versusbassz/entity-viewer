@@ -19,9 +19,15 @@ export const Metabox = () => {
 
     if (response.ok) {
       let fields = await response.json();
-      setData({...data, ...{fields: fields}});
-      setLastUpdated(Date.now());
-      setShowDone(true);
+
+      if (Array.isArray(fields)) {
+        setData({...data, ...{fields: fields}});
+        setLastUpdated(Date.now());
+        setShowDone(true);
+      } else {
+        alert("Incorrect response, see console for details");
+        console.log("wp-meta-viewer response: ", fields);
+      }
     } else {
       alert("HTTP error: " + response.status);
     }
