@@ -71,17 +71,25 @@ function get_meta_id_column_for_entity($entity_name)
     return $entity_name === 'user' ? 'umeta_id' : 'meta_id';
 }
 
+function get_refreshing_nonce_name($entity_name, $item_id)
+{
+    return "_vsm_refresh_data__{$entity_name}_{$item_id}";
+}
+
 function handle_refreshing_data_via_ajax()
 {
-    $send_response = function($raw_data) {
-        $data = is_wp_error($raw_data) ? ['error' => $raw_data->get_error_message()] : $raw_data;
+    $send_response = function($raw_data, int $status = 200) {
+        $is_error = is_wp_error($raw_data);
+        $data = $is_error ? ['error' => $raw_data->get_error_message()] : $raw_data;
 
+//        status_header($status);
+        status_header(400);
         echo json_encode($data);
         die();
     };
 
     if (! current_user_can(VSM_DEFAULT_CAPABILITY)) {
-        $send_response((new \WP_Error("access_restricted", "Access restricted.")));
+        $send_response(new \WP_Error("access_restricted", "Access restricted."), 403);
     }
 
     $args = $_GET;
@@ -89,14 +97,21 @@ function handle_refreshing_data_via_ajax()
     $valid_entities = ['post', 'term', 'user', 'comment'];
 
     if (! isset($args['entity']) || ! in_array($args['entity'], $valid_entities) ) {
-        $send_response((new \WP_Error("invalid_param", "Invalid parameter: entity")));
+        $send_response(new \WP_Error("invalid_param", "Invalid parameter: entity"), 400);
     }
 
     if (! isset($args['id']) || ! is_numeric($args['id'])) {
-        $send_response((new \WP_Error("invalid_param", "Invalid parameter: id")));
+        $send_response(new \WP_Error("invalid_param", "Invalid parameter: id"), 400);
     }
 
-    $fields_data = get_fields_data($args['entity'], absint($args['id']));
+    $entity_name = $args['entity'];
+    $item_id = absint($args['id']);
+
+    if (! wp_verify_nonce($args['nonce'], get_refreshing_nonce_name($entity_name, $item_id))) {
+        $send_response(new \WP_Error("nonce_verification_failed", "Nonce verification failed"), 403);
+    }
+
+    $fields_data = get_fields_data($entity_name, $item_id);
 
     $send_response($fields_data['fields']);
 }
@@ -108,12 +123,14 @@ function render_metabox(array $data, string $entity_name, $item_id)
 	echo '<div id="js-vsm-metabox"></div>' . PHP_EOL;
 	echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s"></div>' . PHP_EOL, esc_attr(json_encode($data)));
 
+    $nonce_name = get_refreshing_nonce_name($entity_name, $item_id);
 	$settings = [
 		'ajax_url' => get_admin_url(null, '/admin-ajax.php'),
 		'query_args' => [
 			'action' => 'vsm_refresh_data',
 			'entity' => $entity_name,
 			'id' => $item_id,
+            'nonce' => wp_create_nonce($nonce_name),
 		],
 	];
 	echo sprintf('<script type="text/javascript">window.vsm = %s;</script>' . PHP_EOL, json_encode($settings));
@@ -197,8 +214,8 @@ function get_meta_from_db($entity_name, $item_id) {
 
     return $wpdb->get_results(
         $wpdb->prepare("
-            SELECT * 
-            FROM {$wpdb->$table} 
+            SELECT *
+            FROM {$wpdb->$table}
             WHERE {$entity_name}_id = %d
             ORDER BY meta_key ASC
         ", $item_id),

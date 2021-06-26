@@ -15,7 +15,9 @@ export const Metabox = () => {
     const url = window.vsm.ajax_url + '?' + urlParams;
     setLoading(true);
 
-    let response = await fetch(url);
+    const response = await fetch(url);
+
+    const log = (data) => console.log("wp-meta-viewer response: ", data);
 
     if (response.ok) {
       let fields = await response.json();
@@ -25,11 +27,12 @@ export const Metabox = () => {
         setLastUpdated(Date.now());
         setShowDone(true);
       } else {
-        alert("Incorrect response, see console for details");
-        console.log("wp-meta-viewer response: ", fields);
+        alert("Incorrect response, see dev-tools (console) for details");
+        log(fields);
       }
     } else {
-      alert("HTTP error: " + response.status);
+      alert("HTTP error: " + response.status + ", see dev-tools (console) for details");
+      log(await response.text());
     }
 
     setLoading(false);
