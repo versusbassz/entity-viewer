@@ -1,20 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import { dynamicSort } from "./utils";
 
-export const Metabox = ({data}) => {
+export const Metabox = () => {
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const jsonData = document.getElementById('js-vsm-fields-data').value;
+    setData(JSON.parse(jsonData));
+  }, []);
+
+  const refreshFields = async (setLoading, setLastUpdated, setShowDone) => {
+    const urlParams = (new URLSearchParams(window.vsm.query_args)).toString();
+    const url = window.vsm.ajax_url + '?' + urlParams;
+    setLoading(true);
+
+    let response = await fetch(url);
+
+    if (response.ok) {
+      let fields = await response.json();
+      setData({...data, ...{fields: fields}});
+      setLastUpdated(Date.now());
+      setShowDone(true);
+    } else {
+      alert("HTTP error: " + response.status);
+    }
+
+    setLoading(false);
+  };
+
+  if (! data.fields) {
+    return <div>&quot;Meta viewer&quot; plugin is loading the initial state...</div>;
+  }
+
   return (
     data.metabox_type === "full" ? (
-      <MetaboxFull data={data} />
+      <MetaboxFull data={data} refreshFields={refreshFields} />
     ) : (
-      <MetaboxContent fields={data.fields} />
+      <MetaboxContent fields={data.fields} refreshFields={refreshFields} />
     )
   );
 };
 
-export const MetaboxFull = ({data}) => {
+export const MetaboxFull = ({data, refreshFields}) => {
   const statusValues = ['opened', 'closed'];
-  const cookieName =  'vsm-metabox-status--' + data['entity_type'];
+  const cookieName =  'vsm-metabox-status--' + data.entity_type;
 
   const [status, setStatus] = useState("opened");
 
@@ -40,13 +70,13 @@ export const MetaboxFull = ({data}) => {
       <h2 className="vsm-metabox__header" onClick={toggleStatus}>{data.metabox_header}</h2>
 
       <div className={contentClasses.join(" ")}>
-        <MetaboxContent fields={data.fields} />
+        <MetaboxContent fields={data.fields} refreshFields={refreshFields} />
       </div>
     </div>
   );
 };
 
-export const MetaboxContent = ({fields}) => {
+export const MetaboxContent = ({fields, refreshFields}) => {
   const serializedFields = fields.filter((item) => item.value_pretty);
 
   const [ ui, setUI ] = useState({
@@ -122,29 +152,35 @@ export const MetaboxContent = ({fields}) => {
 
   return (
     <>
-      <div className="vsm-search">
-        <input
-          type="text"
-          className="vsm-search__input"
-          placeholder="Search"
-          value={ui.search}
-          onChange={(e) => {
-            e.preventDefault();
-            setUI({...ui, ...{search: e.target.value}});
-          }}
-          onKeyPress={(e) => {
-            if (e.which == 13)  {
+      <div className="vsm-top-panel">
+        <div className="vsm-search">
+          <input
+            type="text"
+            className="vsm-search__input"
+            placeholder="Search"
+            value={ui.search}
+            onChange={(e) => {
               e.preventDefault();
-              return false;
-            }
-          }}
-        />
-        <button
-          type="button"
-          className="button-secondary vsm-search__reset"
-          style={ui.search ? {} : {display: "none"}}
-          onClick={() => setUI({...ui, ...{search:""}})}
-        >Reset</button>
+              setUI({...ui, ...{search: e.target.value}});
+            }}
+            onKeyPress={(e) => {
+              if (e.which == 13) { // Enter
+                e.preventDefault();
+                return false;
+              }
+            }}
+          />
+          <button
+            type="button"
+            className="button-secondary vsm-search__reset"
+            style={ui.search ? {} : {display: "none"}}
+            onClick={() => setUI({...ui, ...{search:""}})}
+          >Reset</button>
+        </div>
+
+        <div className="vsm-top-panel__refresh">
+          <RefreshButton refreshFields={refreshFields} />
+        </div>
       </div>
 
       {fieldsSorted.length ? (
@@ -239,3 +275,44 @@ const SortingArrow = ({show, dir}) => {
     <span className={classes.join(" ")} />
   );
 }
+
+const RefreshButton = ({refreshFields}) => {
+  const [loading, setLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(0);
+  const [showDone, setShowDone] = useState(false);
+
+  const buttonText = loading ? "Loading..." : "Refresh data";
+
+  const visualLastUpdated = lastUpdated
+    ? (new Date(lastUpdated)).toLocaleTimeString()
+    : "";
+
+  let hideDoneTimer = useRef(false);
+
+  useEffect(() => {
+    if (showDone) {
+      if (hideDoneTimer.current) clearTimeout(hideDoneTimer.current);
+      hideDoneTimer.current = setTimeout(() => setShowDone(false), 1500);
+    } else if (! showDone && hideDoneTimer.current) {
+      clearTimeout(hideDoneTimer.current);
+    }
+  }, [showDone]);
+
+  return (
+    <div className="vsm-refresh">
+      <button
+        type="button"
+        className="button-secondary vsm-refresh__button"
+        style={loading ? {opacity: 0.5} : {}}
+        disabled={loading}
+        onClick={() => refreshFields(setLoading, setLastUpdated, setShowDone)}
+        onMouseUp={(e) => e.target.blur()}
+      >{buttonText}</button>
+
+      <span className="vsm-refresh__last-updated">
+        {! loading && visualLastUpdated ? `Last updated: ${visualLastUpdated}` : ""}
+        {! loading && showDone && (<span className="vsm-refresh__success">Done!</span>)}
+      </span>
+    </div>
+  );
+};

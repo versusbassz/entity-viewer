@@ -36,15 +36,42 @@
     }
 }
 
-.vsm-search {
+.vsm-top-panel {
+    display: flex;
     margin: 10px 0 4px;
 
+    &__refresh {
+        margin-left: 40px;
+    }
+}
+
+.vsm-search {
     &__input {
         max-width: 150px;
     }
 
     &__reset {
         margin-left: 6px !important;
+    }
+}
+
+.vsm-refresh {
+    display: flex;
+    align-items: center;
+
+    &__button {
+    }
+
+    &__last-updated {
+        margin-left: 10px;
+    }
+
+    &__success {
+        display: inline-block;
+        margin-left: 10px;
+
+        color: lightgreen;
+        font-weight: bold;
     }
 }
 

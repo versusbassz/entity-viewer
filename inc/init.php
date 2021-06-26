@@ -1,8 +1,14 @@
 <?php
 defined('ABSPATH') || exit;
 
-if (! is_admin() || wp_doing_ajax() || ! current_user_can('manage_options')) {
+if (! is_admin() || ! current_user_can('manage_options')) {
     return;
+}
+
+// AJAX-handler: Refresh metabox data
+if (wp_doing_ajax()) {
+	add_action('wp_ajax_vsm_refresh_data', '\\VsMetaViewer\\handle_refreshing_data_via_ajax');
+	return;
 }
 
 // post

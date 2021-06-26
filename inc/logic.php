@@ -13,8 +13,40 @@ function show_metabox($item)
     $item_class = get_class($item);
     $entity_name = str_replace('wp_', '', strtolower($item_class));
 
-    $meta_id_key = $item instanceof \WP_User ? 'umeta_id' : 'meta_id';
+    $id_property = get_id_property_for_entity($entity_name);
+    $item_id = $item->$id_property;
 
+    $fields_data = get_fields_data($entity_name, $item_id);
+
+    $data = [
+        'metabox_type' => in_array($entity_name, ['post', 'comment']) ? 'content' : 'full',
+        'metabox_header' => ucfirst($entity_name) . ' meta',
+        'has_serialized_values' => $fields_data['has_serialized_values'],
+        'entity_type' => $entity_name,
+        'fields' => $fields_data['fields']
+    ];
+
+    render_metabox($data, $entity_name, $item_id);
+}
+
+function get_fields_data($entity_name, $item_id)
+{
+    $meta_id_key = get_meta_id_column_for_entity($entity_name);
+    $meta_raw = get_meta_from_db($entity_name, $item_id);
+
+    $fields = array_map(
+        construct_meta_data_mapper($meta_id_key, $has_serialized_values),
+        $meta_raw
+    );
+
+    return [
+        'fields' => $fields,
+        'has_serialized_values' => $has_serialized_values
+    ];
+}
+
+function get_id_property_for_entity($entity_name)
+{
     switch ($entity_name) {
         case 'post':
         case 'user':
@@ -30,30 +62,60 @@ function show_metabox($item)
             break;
     }
 
-    $meta_raw = get_meta_from_db($entity_name, $item->$id_property);
-
-    $meta = array_map(
-        construct_meta_data_mapper($meta_id_key, $has_serialized_values),
-        $meta_raw
-    );
-
-    $data = [
-        'metabox_type' => in_array($entity_name, ['post', 'comment']) ? 'content' : 'full',
-        'metabox_header' => ucfirst($entity_name) . ' meta',
-        'has_serialized_values' => $has_serialized_values,
-        'entity_type' => $entity_name,
-        'fields' => $meta
-    ];
-
-    render_metabox($data);
+    return $id_property;
 }
 
-function render_metabox(array $data)
+function get_meta_id_column_for_entity($entity_name)
+{
+    return $entity_name === 'user' ? 'umeta_id' : 'meta_id';
+}
+
+function handle_refreshing_data_via_ajax()
+{
+    $send_response = function($raw_data) {
+        $data = is_wp_error($raw_data) ? ['error' => $raw_data->get_error_message()] : $raw_data;
+
+        echo json_encode($data);
+        die();
+    };
+
+    if (! current_user_can('manage_options')) {
+        $send_response((new \WP_Error("access_restricted", "Access restricted.")));
+    }
+
+    $args = $_GET;
+
+    $valid_entities = ['post', 'term', 'user', 'comment'];
+
+    if (! isset($args['entity']) || ! in_array($args['entity'], $valid_entities) ) {
+        $send_response((new \WP_Error("invalid_param", "Invalid parameter: entity")));
+    }
+
+    if (! isset($args['id']) || ! is_numeric($args['id'])) {
+        $send_response((new \WP_Error("invalid_param", "Invalid parameter: id")));
+    }
+
+    $fields_data = get_fields_data($args['entity'], absint($args['id']));
+
+    $send_response($fields_data['fields']);
+}
+
+function render_metabox(array $data, string $entity_name, $item_id)
 {
 	add_action('admin_footer', '\\VsMetaViewer\\render_metabox_scripts', 200);
 
-	echo '<div id="js-vsm-metabox"></div>';
-	echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s" />', esc_attr(json_encode($data)));
+	echo '<div id="js-vsm-metabox"></div>' . PHP_EOL;
+	echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s"></div>' . PHP_EOL, esc_attr(json_encode($data)));
+
+	$settings = [
+		'ajax_url' => get_admin_url(null, '/admin-ajax.php'),
+		'query_args' => [
+			'action' => 'vsm_refresh_data',
+			'entity' => $entity_name,
+			'id' => $item_id,
+		],
+	];
+	echo sprintf('<script type="text/javascript">window.vsm = %s;</script>' . PHP_EOL, json_encode($settings));
 }
 
 function register_post_meta_box($post_type)
