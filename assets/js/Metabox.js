@@ -323,7 +323,7 @@ const RefreshButton = ({refreshFields, fetchedInitial}) => {
 
       <span className="vsm-refresh__last-updated">
         {! loading && visualLastUpdated ? `Last updated: ${visualLastUpdated}` : ""}
-        {! loading && showDone && (<span className="vsm-refresh__success">Done!</span>)}
+        {! loading && showDone && (<span className="vsm-refresh__success" dangerouslySetInnerHTML={{__html: '&check;'}} />)}
       </span>
     </div>
   );

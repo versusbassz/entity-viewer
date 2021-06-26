@@ -63,6 +63,8 @@
     }
 
     &__last-updated {
+        display: flex;
+        align-items: center;
         margin-left: 10px;
     }
 
@@ -72,6 +74,8 @@
 
         color: lightgreen;
         font-weight: bold;
+        font-size: 1.4em;
+        line-height: 1;
     }
 }
 
