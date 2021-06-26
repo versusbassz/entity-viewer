@@ -75,6 +75,10 @@
     }
 }
 
+.vsm-highlighted {
+    background-color: #fca;
+}
+
 .vsm-table {
     border-collapse: collapse;
 
@@ -121,11 +125,10 @@
 .vsm-value {
     &_type {
         &_pretty {
-            pre {
-                margin-top:0;
-                margin-bottom:0;
-                white-space: pre-wrap;
-            }
+            margin-top: 0;
+            margin-bottom: 0;
+            font-family: monospace;
+            white-space: pre-wrap;
         }
 
         &_plain {

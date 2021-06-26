@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
+import Highlighter from "react-highlight-words";
 import { dynamicSort } from "./utils";
 
 export const Metabox = () => {
@@ -245,11 +246,29 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
                   <td className="vsm-table__column vsm-table__column_type_td vsm-table__column_content_value">
                     {valueType === "pretty" ? (
                       <div className="vsm-value_type_pretty">
-                        <pre>{item.value_pretty}</pre>
+                        {item.value_pretty && ui.search ? (
+                          <Highlighter
+                            highlightClassName="vsm-highlighted"
+                            searchWords={[ui.search]}
+                            textToHighlight={item.value_pretty}
+                          />
+                        ) : (
+                          item.value_pretty
+                        )}
                       </div>
                     ) : (
                       <div className="vsm-value_type_plain">
-                        &#39;{item.value}&#39;
+                        &#39;
+                        {item.value && ui.search ? (
+                          <Highlighter
+                            highlightClassName="vsm-highlighted"
+                            searchWords={[ui.search]}
+                            textToHighlight={item.value}
+                          />
+                        ) : (
+                          item.value
+                        )}
+                        &#39;
                       </div>
                     )}
                   </td>
