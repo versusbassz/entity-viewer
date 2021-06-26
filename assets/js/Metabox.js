@@ -37,7 +37,7 @@ export const Metabox = () => {
     data.metabox_type === "full" ? (
       <MetaboxFull data={data} refreshFields={refreshFields} />
     ) : (
-      <MetaboxContent fields={data.fields} refreshFields={refreshFields} />
+      <MetaboxContent fields={data.fields} fetchedInitial={data.fetched_initial} refreshFields={refreshFields} />
     )
   );
 };
@@ -70,13 +70,13 @@ export const MetaboxFull = ({data, refreshFields}) => {
       <h2 className="vsm-metabox__header" onClick={toggleStatus}>{data.metabox_header}</h2>
 
       <div className={contentClasses.join(" ")}>
-        <MetaboxContent fields={data.fields} refreshFields={refreshFields} />
+        <MetaboxContent fields={data.fields} fetchedInitial={data.fetched_initial} refreshFields={refreshFields} />
       </div>
     </div>
   );
 };
 
-export const MetaboxContent = ({fields, refreshFields}) => {
+export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
   const serializedFields = fields.filter((item) => item.value_pretty);
 
   const [ ui, setUI ] = useState({
@@ -179,7 +179,7 @@ export const MetaboxContent = ({fields, refreshFields}) => {
         </div>
 
         <div className="vsm-top-panel__refresh">
-          <RefreshButton refreshFields={refreshFields} />
+          <RefreshButton refreshFields={refreshFields} fetchedInitial={fetchedInitial} />
         </div>
       </div>
 
@@ -276,10 +276,13 @@ const SortingArrow = ({show, dir}) => {
   );
 }
 
-const RefreshButton = ({refreshFields}) => {
+const RefreshButton = ({refreshFields, fetchedInitial}) => {
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(0);
   const [showDone, setShowDone] = useState(false);
+
+  // php provides timestamps in seconds, js prefers miliseconds
+  useEffect(() => setLastUpdated(fetchedInitial * 1000), []);
 
   const buttonText = loading ? "Loading..." : "Refresh data";
 

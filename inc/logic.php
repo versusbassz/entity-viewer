@@ -23,7 +23,8 @@ function show_metabox($item)
         'metabox_header' => ucfirst($entity_name) . ' meta',
         'has_serialized_values' => $fields_data['has_serialized_values'],
         'entity_type' => $entity_name,
-        'fields' => $fields_data['fields']
+        'fields' => $fields_data['fields'],
+        'fetched_initial' => time(),
     ];
 
     render_metabox($data, $entity_name, $item_id);
