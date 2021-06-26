@@ -82,8 +82,7 @@ function handle_refreshing_data_via_ajax()
         $is_error = is_wp_error($raw_data);
         $data = $is_error ? ['error' => $raw_data->get_error_message()] : $raw_data;
 
-//        status_header($status);
-        status_header(400);
+        status_header($status);
         echo json_encode($data);
         die();
     };
