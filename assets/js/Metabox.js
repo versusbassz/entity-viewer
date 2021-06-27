@@ -256,9 +256,15 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
                       </div>
                     ) : (
                       <div className="vsm-value_type_plain">
-                        &#39;
-                        <CellContent value={item.value} search={ui.search} />
-                        &#39;
+                        {item.value === null ? (
+                          <span className="vsm-null">Null</span>
+                        ) : (
+                          <>
+                            &#39;
+                            <CellContent value={item.value} search={ui.search} />
+                            &#39;
+                          </>
+                        )}
                       </div>
                     )}
                   </td>
