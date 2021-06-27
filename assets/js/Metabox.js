@@ -315,6 +315,11 @@ const RefreshButton = ({refreshFields, fetchedInitial}) => {
 
   // tracking saving state of Gutenberg
   useEffect(() => {
+    if (! window.wp || ! window.wp.data || ! document.body.classList.contains('block-editor-page')) {
+      return;
+    }
+    const wp = window.wp;
+
     let prevSavingState = false;
     const editor = wp.data.select('core/editor');
 
