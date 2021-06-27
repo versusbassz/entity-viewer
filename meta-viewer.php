@@ -1,6 +1,7 @@
 <?php
 /*
 Plugin name: VS meta viewer
+Version: 0.2.1
 Requires at least: 5.6.4
 Requires PHP: 7.3
 
