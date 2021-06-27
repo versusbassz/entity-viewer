@@ -232,8 +232,13 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
 
               return (
                 <tr key={item.id.toString()} className="vsm-table__row">
-                  <td className="vsm-table__column vsm-table__column_type_td">{item.id}</td>
-                  <td className="vsm-table__column vsm-table__column_type_td">{item.key}</td>
+                  <td className="vsm-table__column vsm-table__column_type_td">
+                    <CellContent value={item.id} search={ui.search} />
+                  </td>
+
+                  <td className="vsm-table__column vsm-table__column_type_td">
+                    <CellContent value={item.key} search={ui.search} />
+                  </td>
 
                   <td className="vsm-table__column vsm-table__column_type_td">
                     {item.value_pretty && (
@@ -247,28 +252,12 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
                   <td className="vsm-table__column vsm-table__column_type_td vsm-table__column_content_value">
                     {valueType === "pretty" ? (
                       <div className="vsm-value_type_pretty">
-                        {item.value_pretty && ui.search ? (
-                          <Highlighter
-                            highlightClassName="vsm-highlighted"
-                            searchWords={[ui.search]}
-                            textToHighlight={item.value_pretty}
-                          />
-                        ) : (
-                          item.value_pretty
-                        )}
+                        <CellContent value={item.value_pretty} search={ui.search} />
                       </div>
                     ) : (
                       <div className="vsm-value_type_plain">
                         &#39;
-                        {item.value && ui.search ? (
-                          <Highlighter
-                            highlightClassName="vsm-highlighted"
-                            searchWords={[ui.search]}
-                            textToHighlight={item.value}
-                          />
-                        ) : (
-                          item.value
-                        )}
+                        <CellContent value={item.value} search={ui.search} />
                         &#39;
                       </div>
                     )}
@@ -371,5 +360,20 @@ const RefreshButton = ({refreshFields, fetchedInitial}) => {
         {! loading && showDone && (<span className="vsm-refresh__success">Done!</span>)}
       </span>
     </div>
+  );
+};
+
+const CellContent = ({value: content, search}) => {
+  // for "id" column
+  const content_visible = Number.isInteger(content) ? content.toString() : content;
+
+  return content && search ? (
+    <Highlighter
+      highlightClassName="vsm-highlighted"
+      searchWords={[search]}
+      textToHighlight={content_visible}
+    />
+  ) : (
+    content
   );
 };
