@@ -2,6 +2,7 @@
 
 /custom/
 !/custom/.keep
+/dist
 
 /vendor
 /node_modules
