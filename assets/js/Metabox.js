@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import Highlighter from "react-highlight-words";
-import { dynamicSort } from "./utils";
+import { dynamicSort, searchString } from "./utils";
 
 export const Metabox = () => {
   const [data, setData] = useState({});
@@ -152,7 +152,7 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
       ['id', 'key', 'value'].forEach((field_name) => {
         let value = Number.isInteger(field[field_name]) ? field[field_name].toString(10) : String(field[field_name]);
 
-        if (! contains && value.toLowerCase().includes(ui.search.toLowerCase())) {
+        if (! contains && searchString(ui.search, value)) {
           contains = true;
         }
       });
@@ -251,9 +251,14 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
 
                   <td className="vsm-table__column vsm-table__column_type_td vsm-table__column_content_value">
                     {valueType === "pretty" ? (
-                      <div className="vsm-value_type_pretty">
-                        <CellContent value={item.value_pretty} search={ui.search} />
-                      </div>
+                      <>
+                        <div className="vsm-value_type_pretty">
+                          <CellContent value={item.value_pretty} search={ui.search} />
+                        </div>
+                        {ui.search && (searchString(ui.search, item.value) && ! searchString(ui.search, item.value_pretty)) && (
+                          <span className="vsm-value-note">* see the raw value for search results</span>
+                        )}
+                      </>
                     ) : (
                       <div className="vsm-value_type_plain">
                         {item.value === null ? (
