@@ -6,6 +6,7 @@ import { dynamicSort } from "./utils";
 export const Metabox = () => {
   const [data, setData] = useState({});
 
+  // getting initial data
   useEffect(() => {
     const jsonData = document.getElementById('js-vsm-fields-data').value;
     setData(JSON.parse(jsonData));
@@ -311,6 +312,26 @@ const RefreshButton = ({refreshFields, fetchedInitial}) => {
 
   // php provides timestamps in seconds, js prefers miliseconds
   useEffect(() => setLastUpdated(fetchedInitial * 1000), []);
+
+  // tracking saving state of Gutenberg
+  useEffect(() => {
+    let prevSavingState = false;
+    const editor = wp.data.select('core/editor');
+
+    const unsubscribe = wp.data.subscribe(() => {
+      const isSavingPost = editor.isSavingPost();
+      if (isSavingPost === prevSavingState || editor.isAutosavingPost()) return;
+
+      prevSavingState = isSavingPost;
+      const didPostSaveRequestSucceed = editor.didPostSaveRequestSucceed();
+
+      if (isSavingPost === false && didPostSaveRequestSucceed) {
+        refreshFields(setLoading, setLastUpdated, setShowDone);
+      }
+    });
+
+    return () => unsubscribe();
+  })
 
   const buttonText = loading ? "Loading..." : "Refresh data";
 
