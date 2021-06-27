@@ -87,7 +87,7 @@ function handle_refreshing_data_via_ajax()
         die();
     };
 
-    if (! current_user_can(VSM_DEFAULT_CAPABILITY)) {
+    if (! is_plugin_allowed(get_current_user_id())) {
         $send_response(new \WP_Error("access_restricted", "Access restricted."), 403);
     }
 
@@ -240,4 +240,16 @@ function enqueue_scripts()
     }
 
     // TODO maybe add styles for the metabox here
+}
+
+/**
+ * @see https://wordpress.org/support/article/roles-and-capabilities/#administrator
+ */
+function is_plugin_allowed($user_id): bool
+{
+    $capability = is_multisite() ? 'manage_options' : 'create_users';
+    $allowed = user_can($user_id, $capability);
+    $allowed_filtered = apply_filters('vsm/is_plugin_allowed', $allowed, $user_id);
+
+    return $allowed_filtered;
 }

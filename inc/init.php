@@ -1,9 +1,10 @@
 <?php
+
+use function VsMetaViewer\is_plugin_allowed;
+
 defined('ABSPATH') || exit;
 
-define('VSM_DEFAULT_CAPABILITY', 'delete_users');
-
-if (! is_admin() || ! current_user_can(VSM_DEFAULT_CAPABILITY)) {
+if (! is_admin() || ! is_plugin_allowed(get_current_user_id())) {
     return;
 }
 
