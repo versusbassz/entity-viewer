@@ -257,7 +257,7 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
                     ) : (
                       <div className="vsm-value_type_plain">
                         {item.value === null ? (
-                          <span className="vsm-null">Null</span>
+                          <span className="vsm-null">null</span>
                         ) : (
                           <>
                             &#39;
