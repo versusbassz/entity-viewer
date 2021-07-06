@@ -6,7 +6,7 @@ module.exports = (env, argv) => {
   const isModeProduction = argv.mode === 'production';
 
   const mode = isModeProduction ? 'production' : 'development';
-  console.log(`[META-VIEWER] Webpack mode = ${mode}`);
+  console.log(`[ENTITY-VIEWER] Webpack mode = ${mode}`);
 
   // Devtool
   const sourceMaps = isModeProduction ? 'source-map' : 'inline-source-map';
@@ -23,7 +23,7 @@ module.exports = (env, argv) => {
     mode,
     entry: './assets/js/main.js',
     output: {
-      filename: 'meta-viewer.build.js',
+      filename: 'entity-viewer.build.js',
       path: path.resolve(__dirname, 'assets/build'),
       clean: true,
     },

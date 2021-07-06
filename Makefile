@@ -15,16 +15,16 @@ release:
 	mkdir -p ./dist
 	rm -rf ./dist/*
 
-	mkdir -p ./dist/wp-meta-viewer
-	mkdir -p ./dist/wp-meta-viewer/assets
+	mkdir -p ./dist/entity-viewer
+	mkdir -p ./dist/entity-viewer/assets
 
-	cp ./README.md       ./dist/wp-meta-viewer/
-	cp ./meta-viewer.php ./dist/wp-meta-viewer/
+	cp ./README.md       ./dist/entity-viewer/
+	cp ./entity-viewer.php ./dist/entity-viewer/
 
-	cp -r ./assets/build ./dist/wp-meta-viewer/assets
+	cp -r ./assets/build ./dist/entity-viewer/assets
 
-	cp -r ./inc ./dist/wp-meta-viewer/
-	cd ./dist && zip -r wp-meta-viewer.zip wp-meta-viewer
+	cp -r ./inc ./dist/entity-viewer/
+	cd ./dist && zip -r entity-viewer.zip entity-viewer
 
 wp-core-download:
 	rm -rf ./custom/wp-core

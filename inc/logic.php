@@ -1,5 +1,5 @@
 <?php
-namespace VsMetaViewer;
+namespace VsEntityViewer;
 
 defined('ABSPATH') || exit;
 
@@ -117,7 +117,7 @@ function handle_refreshing_data_via_ajax()
 
 function render_metabox(array $data, string $entity_name, $item_id)
 {
-	add_action('admin_footer', '\\VsMetaViewer\\render_metabox_scripts', 200);
+	add_action('admin_footer', '\\VsEntityViewer\\render_metabox_scripts', 200);
 
 	echo '<div id="js-vsm-metabox"></div>' . PHP_EOL;
 	echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s"></div>' . PHP_EOL, esc_attr(json_encode($data)));
@@ -146,7 +146,7 @@ function register_post_meta_box($post_type)
     add_meta_box(
         'vsm-post-meta',
         'Post meta',
-        '\\VsMetaViewer\\show_metabox',
+        '\\VsEntityViewer\\show_metabox',
         $typenow,
         'normal'
     );
@@ -157,7 +157,7 @@ function register_comment_meta_box()
     add_meta_box(
         'vsm-comment-meta',
         'Comment meta',
-        '\\VsMetaViewer\\show_metabox',
+        '\\VsEntityViewer\\show_metabox',
         'comment',
         'normal' // context required!
     );
@@ -175,13 +175,13 @@ function register_term_meta_box() {
     global $pagenow, $taxnow;
 
     if ($pagenow === 'term.php' && $taxnow) {
-        add_action("{$taxnow}_edit_form", '\\VsMetaViewer\\show_metabox', 1000, 2);
+        add_action("{$taxnow}_edit_form", '\\VsEntityViewer\\show_metabox', 1000, 2);
     }
 }
 
 function render_metabox_scripts()
 {
-	$url = plugins_url('assets/build/meta-viewer.build.js', __DIR__);
+	$url = plugins_url('assets/build/entity-viewer.build.js', __DIR__);
 	echo sprintf('<script type="text/javascript" src="%s"></script>', esc_attr($url));
 }
 

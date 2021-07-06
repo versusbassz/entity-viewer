@@ -19,7 +19,7 @@ export const Metabox = () => {
 
     const response = await fetch(url);
 
-    const log = (data) => console.log("wp-meta-viewer response: ", data);
+    const log = (data) => console.log("entity-viewer response: ", data);
 
     if (response.ok) {
       let fields = await response.json();
@@ -41,7 +41,7 @@ export const Metabox = () => {
   };
 
   if (! data.fields) {
-    return <div>&quot;Meta viewer&quot; plugin is loading the initial state...</div>;
+    return <div>&quot;Entity viewer&quot; plugin is loading the initial state...</div>;
   }
 
   return (

@@ -26,7 +26,7 @@ class MiscCest
         $I->amOnPage('/wp/wp-admin/post.php?post=1&action=edit');
 
         $I->seeElement('#vsmt-post-meta');
-        $I->seeElement('.js-metaviewer-data');
-        $I->dontSeeElement('.js-metaviewer-metabox');
+        $I->seeElement('.js-entity-viewer-data');
+        $I->dontSeeElement('.js-entity-viewer-metabox');
     }
 }
