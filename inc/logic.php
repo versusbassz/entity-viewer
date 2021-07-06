@@ -284,3 +284,19 @@ function is_plugin_allowed($user_id): bool
 
     return $allowed_filtered;
 }
+
+/**
+ * @param bool   $override Whether to override the .mo file loading. Default false.
+ * @param string $domain   Text domain. Unique identifier for retrieving translated strings.
+ * @param string $mofile   Path to the MO file.
+ *
+ * @return bool
+ */
+function disable_i18n_for_plugin($override, $domain, $mofile)
+{
+    if ($domain === 'entity-viewer') {
+        return true;
+    }
+
+    return $override;
+}

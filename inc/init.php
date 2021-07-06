@@ -14,6 +14,10 @@ if (wp_doing_ajax()) {
 	return;
 }
 
+if (! apply_filters('vsm/is_i18n_enabled', true)) {
+    add_filter('override_load_textdomain', '\\VsEntityViewer\\disable_i18n_for_plugin', 10, 3);
+}
+
 // post
 add_action('add_meta_boxes', '\\VsEntityViewer\\register_post_meta_box', 1000, 1);
 
