@@ -1,6 +1,8 @@
 <?php
 namespace VsEntityViewer;
 
+use Exception;
+
 defined('ABSPATH') || exit;
 
 /**
@@ -20,7 +22,7 @@ function show_metabox($item)
 
     $data = [
         'metabox_type' => in_array($entity_name, ['post', 'comment']) ? 'content' : 'full',
-        'metabox_header' => ucfirst($entity_name) . ' meta',
+        'metabox_header' => get_metabox_title_for_entity($entity_name),
         'has_serialized_values' => $fields_data['has_serialized_values'],
         'entity_type' => $entity_name,
         'fields' => $fields_data['fields'],
@@ -71,6 +73,17 @@ function get_meta_id_column_for_entity($entity_name)
     return $entity_name === 'user' ? 'umeta_id' : 'meta_id';
 }
 
+function get_metabox_title_for_entity($entity_name)
+{
+    switch ($entity_name) {
+        case 'post': return esc_html__('Post meta', 'entity-viewer');
+        case 'user': return esc_html__('User meta', 'entity-viewer');
+        case 'term': return esc_html__('Term meta', 'entity-viewer');
+        case 'comment': return esc_html__('Comment meta', 'entity-viewer');
+        default: throw new Exception('Incorrect entity name: ' . var_export($entity_name, true));
+    }
+}
+
 function get_refreshing_nonce_name($entity_name, $item_id)
 {
     return "_vsm_refresh_data__{$entity_name}_{$item_id}";
@@ -88,7 +101,7 @@ function handle_refreshing_data_via_ajax()
     };
 
     if (! is_plugin_allowed(get_current_user_id())) {
-        $send_response(new \WP_Error("access_restricted", "Access restricted."), 403);
+        $send_response(new \WP_Error("access_restricted", esc_html__("Access restricted.", 'entity-viewer')), 403);
     }
 
     $args = $_GET;
@@ -96,18 +109,18 @@ function handle_refreshing_data_via_ajax()
     $valid_entities = ['post', 'term', 'user', 'comment'];
 
     if (! isset($args['entity']) || ! in_array($args['entity'], $valid_entities) ) {
-        $send_response(new \WP_Error("invalid_param", "Invalid parameter: entity"), 400);
+        $send_response(new \WP_Error("invalid_param", esc_html__("Invalid parameter: entity", 'entity-viewer')), 400);
     }
 
     if (! isset($args['id']) || ! is_numeric($args['id'])) {
-        $send_response(new \WP_Error("invalid_param", "Invalid parameter: id"), 400);
+        $send_response(new \WP_Error("invalid_param", esc_html__("Invalid parameter: id", 'entity-viewer')), 400);
     }
 
     $entity_name = $args['entity'];
     $item_id = absint($args['id']);
 
     if (! wp_verify_nonce($args['nonce'], get_refreshing_nonce_name($entity_name, $item_id))) {
-        $send_response(new \WP_Error("nonce_verification_failed", "Nonce verification failed"), 403);
+        $send_response(new \WP_Error("nonce_verification_failed", esc_html__("Nonce verification failed", 'entity-viewer')), 403);
     }
 
     $fields_data = get_fields_data($entity_name, $item_id);
@@ -132,6 +145,24 @@ function render_metabox(array $data, string $entity_name, $item_id)
             'nonce' => wp_create_nonce($nonce_name),
 		],
 	];
+
+    $settings['i18n'] = [
+        'search_placeholder' => esc_html__('Search', 'entity-viewer'),
+        'refresh_data' => esc_html__('Refresh data', 'entity-viewer'),
+        'loading' => esc_html__('Loading...', 'entity-viewer'),
+        'done' => esc_html__('Done!', 'entity-viewer'),
+        'last_updated' => esc_html__('Last updated', 'entity-viewer'),
+        'th_id' => esc_html__('Meta id', 'entity-viewer'),
+        'th_key' => esc_html__('Key', 'entity-viewer'),
+        'th_value' => esc_html__('Value', 'entity-viewer'),
+        'incorrect_response' => esc_html__('Incorrect response, see dev-tools (console) for details', 'entity-viewer'),
+        'http_error' => esc_html__('HTTP error: {{status}}, see dev-tools (console) for details', 'entity-viewer'),
+        'loading_initial_state' => esc_html__('The initial state is loading...', 'entity-viewer'),
+        'fields_not_found' => esc_html__('There are no meta fields for this item.', 'entity-viewer'),
+        'fields_not_found_for_search_query' => esc_html__('There are no meta fields for this search query.', 'entity-viewer'),
+        'see_raw_value' => esc_html__('see the raw value for search results', 'entity-viewer'),
+    ];
+
 	echo sprintf('<script type="text/javascript">window.vsm = %s;</script>' . PHP_EOL, json_encode($settings));
 }
 
@@ -145,7 +176,7 @@ function register_post_meta_box($post_type)
 
     add_meta_box(
         'vsm-post-meta',
-        'Post meta',
+        get_metabox_title_for_entity('post'),
         '\\VsEntityViewer\\show_metabox',
         $typenow,
         'normal'
@@ -156,7 +187,7 @@ function register_comment_meta_box()
 {
     add_meta_box(
         'vsm-comment-meta',
-        'Comment meta',
+        get_metabox_title_for_entity('comment'),
         '\\VsEntityViewer\\show_metabox',
         'comment',
         'normal' // context required!

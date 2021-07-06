@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import Highlighter from "react-highlight-words";
-import { dynamicSort, searchString } from "./utils";
+import { dynamicSort, searchString, str } from "./utils";
 
 export const Metabox = () => {
   const [data, setData] = useState({});
@@ -29,11 +29,11 @@ export const Metabox = () => {
         setLastUpdated(Date.now());
         setShowDone(true);
       } else {
-        alert("Incorrect response, see dev-tools (console) for details");
+        alert(str("incorrect_response"));
         log(fields);
       }
     } else {
-      alert("HTTP error: " + response.status + ", see dev-tools (console) for details");
+      alert(str("http_error").replace('{{status}}', response.status));
       log(await response.text());
     }
 
@@ -41,7 +41,7 @@ export const Metabox = () => {
   };
 
   if (! data.fields) {
-    return <div>&quot;Entity viewer&quot; plugin is loading the initial state...</div>;
+    return <div>{str("loading_initial_state")}</div>;
   }
 
   return (
@@ -137,7 +137,7 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
 
   if (! fields.length) {
     return (
-      <div className="vsm-message vsm-message_type_not-exists">There are no meta fields for this item.</div>
+      <div className="vsm-message vsm-message_type_not-exists">{str("fields_not_found")}</div>
     );
   }
 
@@ -168,7 +168,7 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
           <input
             type="text"
             className="vsm-search__input"
-            placeholder="Search"
+            placeholder={str("search_placeholder")}
             value={ui.search}
             onChange={(e) => {
               e.preventDefault();
@@ -202,7 +202,7 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
                 className="vsm-table__column vsm-table__column_sortable vsm-table__column_content_umeta-id"
                 onClick={() => sortFields("id")}
               >
-                Meta id
+                {str("th_id")}
                 <SortingArrow show={ui.sorting.column === "id"} dir={ui.sorting.dir} />
               </th>
 
@@ -210,7 +210,8 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
                 className="vsm-table__column vsm-table__column_sortable"
                 onClick={() => sortFields("key")}
               >
-                Key
+
+                {str("th_key")}
                 <SortingArrow show={ui.sorting.column === "key"} dir={ui.sorting.dir} />
               </th>
 
@@ -222,7 +223,7 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
                   />
                 )}
               </th>
-              <th className="vsm-table__column table__column_type_th">Value</th>
+              <th className="vsm-table__column table__column_type_th">{str("th_value")}</th>
             </tr>
           </thead>
 
@@ -256,7 +257,7 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
                           <CellContent value={item.value_pretty} search={ui.search} />
                         </div>
                         {ui.search && (searchString(ui.search, item.value) && ! searchString(ui.search, item.value_pretty)) && (
-                          <span className="vsm-value-note">* see the raw value for search results</span>
+                          <span className="vsm-value-note">* {str("see_raw_value")}</span>
                         )}
                       </>
                     ) : (
@@ -279,7 +280,7 @@ export const MetaboxContent = ({fields, refreshFields, fetchedInitial}) => {
           </tbody>
         </table>
       ) : (
-        <div className="vsm-message vsm-message_type_not-found">There are no meta fields for this search query.</div>
+        <div className="vsm-message vsm-message_type_not-found">{str("fields_not_found_for_search_query")}</div>
       )}
     </>
   );
@@ -338,10 +339,10 @@ const RefreshButton = ({refreshFields, fetchedInitial}) => {
     return () => unsubscribe();
   })
 
-  const buttonText = loading ? "Loading..." : "Refresh data";
+  const buttonText = loading ? str("loading") : str("refresh_data");
 
   const visualLastUpdated = lastUpdated
-    ? (new Date(lastUpdated)).toLocaleTimeString()
+    ? (new Date(lastUpdated)).toLocaleTimeString() // doesn't need i18n (done by a browser itself)
     : "";
 
   let hideDoneTimer = useRef(false);
@@ -367,8 +368,8 @@ const RefreshButton = ({refreshFields, fetchedInitial}) => {
       >{buttonText}</button>
 
       <span className="vsm-refresh__last-updated">
-        {! loading && visualLastUpdated ? `Last updated: ${visualLastUpdated}` : ""}
-        {! loading && showDone && (<span className="vsm-refresh__success">Done!</span>)}
+        {! loading && visualLastUpdated ? `${str("last_updated")}: ${visualLastUpdated}` : ""}
+        {! loading && showDone && (<span className="vsm-refresh__success">{str("done")}</span>)}
       </span>
     </div>
   );

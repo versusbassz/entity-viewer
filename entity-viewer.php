@@ -4,6 +4,7 @@ Plugin name: Entity viewer
 Version: 0.2.1
 Requires at least: 5.6.4
 Requires PHP: 7.3
+Text Domain: entity-viewer
 
 Global PHP prefix: vsm
 */
@@ -34,12 +35,12 @@ function vsm_start_plugin() {
 }
 
 function vsm_display_php_requirement_notice() {
-	$message = 'The plugin "Entity viewer" doesn\'t support your PHP version and doesn\'t get initialized because of that.';
+	$message = esc_html__('The plugin "Entity viewer" doesn\'t support your PHP version and doesn\'t get initialized because of that.', 'entity-viewer');
 	vsm_display_admin_notice( $message );
 }
 
 function vsm_display_wp_core_requirement_notice() {
-	$message = 'The plugin "Entity viewer" doesn\'t support your WordPress version and doesn\'t get initialized because of that.';
+	$message = esc_html__('The plugin "Entity viewer" doesn\'t support your WordPress version and doesn\'t get initialized because of that.', 'entity-viewer');
 	vsm_display_admin_notice( $message );
 }
 
