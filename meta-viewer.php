@@ -13,17 +13,24 @@ defined('ABSPATH') || exit;
 vsm_start_plugin();
 
 function vsm_start_plugin() {
-	if (! version_compare(PHP_VERSION, '7.3.0', '>=')) {
-		add_action('admin_notices', 'vsm_display_php_requirement_notice');
-	}
+    $supported_php_version = version_compare(PHP_VERSION, '7.3.0', '>=');
 
-	global $wp_version;
+    if (! $supported_php_version) {
+        add_action('admin_notices', 'vsm_display_php_requirement_notice');
+    }
 
-	if (! version_compare($wp_version, '5.6.4', '>=')) {
-		add_action('admin_notices', 'vsm_display_wp_core_requirement_notice');
-	}
+    global $wp_version;
+    $supported_wp_version = version_compare($wp_version, '5.6.4', '>=');
 
-	add_action('admin_init', 'vsm_init_plugin');
+    if (! $supported_wp_version) {
+        add_action('admin_notices', 'vsm_display_wp_core_requirement_notice');
+    }
+
+    if (! $supported_php_version || ! $supported_wp_version) {
+        return;
+    }
+
+    add_action('admin_init', 'vsm_init_plugin');
 }
 
 function vsm_display_php_requirement_notice() {
