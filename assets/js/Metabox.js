@@ -29,11 +29,11 @@ export const Metabox = () => {
         setLastUpdated(Date.now());
         setShowDone(true);
       } else {
-        alert(str("incorrect_response"));
+        alert('[Entity viewer] ' + str("incorrect_response"));
         log(fields);
       }
     } else {
-      alert(str("http_error").replace('{{status}}', response.status));
+      alert('[Entity viewer] ' + str("http_error").replace('{{status}}', response.status));
       log(await response.text());
     }
 
