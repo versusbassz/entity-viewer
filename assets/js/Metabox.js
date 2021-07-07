@@ -22,9 +22,17 @@ export const Metabox = () => {
     const log = (data) => console.log("entity-viewer response: ", data);
 
     if (response.ok) {
-      let fields = await response.json();
+      let isJsonError = false;
+      let fields;
 
-      if (Array.isArray(fields)) {
+      try {
+        fields = await response.json();
+      } catch (e) {
+        isJsonError = true;
+        fields = e;
+      }
+
+      if (! isJsonError && Array.isArray(fields)) {
         setData({...data, ...{fields: fields}});
         setLastUpdated(Date.now());
         setShowDone(true);
