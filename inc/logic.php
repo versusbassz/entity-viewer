@@ -265,6 +265,9 @@ function get_meta_from_db(string $entity_name, int $item_id) {
     );
 }
 
+/**
+ * @deprecated maybe add styles for the metabox here?
+ */
 function enqueue_scripts()
 {
     global $pagenow;
@@ -282,7 +285,7 @@ function enqueue_scripts()
         return;
     }
 
-    // TODO maybe add styles for the metabox here
+    // ...
 }
 
 /**
