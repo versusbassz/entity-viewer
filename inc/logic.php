@@ -82,15 +82,12 @@ function get_meta_id_column_for_entity(string $entity_name): string
     return $entity_name === 'user' ? 'umeta_id' : 'meta_id';
 }
 
-function get_metabox_title_for_entity($entity_name)
+/**
+ * @deprecated It should be transformed to a constant-value in the future
+ */
+function get_metabox_title_for_entity(string $entity_name): string
 {
-    switch ($entity_name) {
-        case 'post': return esc_html__('Post meta', 'entity-viewer');
-        case 'user': return esc_html__('User meta', 'entity-viewer');
-        case 'term': return esc_html__('Term meta', 'entity-viewer');
-        case 'comment': return esc_html__('Comment meta', 'entity-viewer');
-        default: throw new Exception('Incorrect entity name: ' . var_export($entity_name, true));
-    }
+	return (string) __('Entity viewer', 'entity-viewer');
 }
 
 function get_refreshing_nonce_name(string $entity_name, int $item_id): string
