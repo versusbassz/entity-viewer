@@ -1,16 +1,16 @@
 <?php
+declare(strict_types = 1);
+
 namespace VsEntityViewer;
 
-use Exception;
+use WP_Error;
 
 defined('ABSPATH') || exit;
 
 /**
  * TODO needs comments
- *
- * @param object $item
  */
-function show_metabox($item)
+function show_metabox(object $item): void
 {
     $item_class = get_class($item);
     $entity_name = str_replace('wp_', '', strtolower($item_class));
@@ -32,13 +32,14 @@ function show_metabox($item)
     render_metabox($data, $entity_name, $item_id);
 }
 
-function get_fields_data($entity_name, $item_id)
+function get_fields_data(string $entity_name, int $item_id): array
 {
     $meta_id_key = get_meta_id_column_for_entity($entity_name);
     $meta_raw = get_meta_from_db($entity_name, $item_id);
+	$has_serialized_values = false;
 
     $fields = array_map(
-        construct_meta_data_mapper($meta_id_key, $has_serialized_values),
+        construct_meta_data_mapper($meta_id_key, $has_serialized_values ),
         $meta_raw
     );
 
@@ -48,7 +49,11 @@ function get_fields_data($entity_name, $item_id)
     ];
 }
 
-function get_id_property_for_entity($entity_name)
+/**
+ * Returns a name of "entity"-id column in related meta table
+ * E.g., post -> post_id, user -> ID.
+ */
+function get_id_property_for_entity(string $entity_name): string
 {
     switch ($entity_name) {
         case 'post':
@@ -68,7 +73,11 @@ function get_id_property_for_entity($entity_name)
     return $id_property;
 }
 
-function get_meta_id_column_for_entity($entity_name)
+/**
+ * Returns a name of "id" column in target meta table
+ * E.g., post -> meta_id, user -> umeta_id.
+ */
+function get_meta_id_column_for_entity(string $entity_name): string
 {
     return $entity_name === 'user' ? 'umeta_id' : 'meta_id';
 }
@@ -84,11 +93,16 @@ function get_metabox_title_for_entity($entity_name)
     }
 }
 
-function get_refreshing_nonce_name($entity_name, $item_id)
+function get_refreshing_nonce_name(string $entity_name, int $item_id): string
 {
     return "_vsm_refresh_data__{$entity_name}_{$item_id}";
 }
 
+/**
+ * AJAX-handler for "Refresh data"
+ *
+ * @return WP_Error|array
+ */
 function handle_refreshing_data_via_ajax()
 {
     $send_response = function($raw_data, int $status = 200) {
@@ -101,7 +115,7 @@ function handle_refreshing_data_via_ajax()
     };
 
     if (! is_plugin_allowed(get_current_user_id())) {
-        $send_response(new \WP_Error("access_restricted", esc_html__("Access restricted.", 'entity-viewer')), 403);
+        $send_response(new WP_Error("access_restricted", esc_html__("Access restricted.", 'entity-viewer')), 403);
     }
 
     $args = $_GET;
@@ -109,18 +123,18 @@ function handle_refreshing_data_via_ajax()
     $valid_entities = ['post', 'term', 'user', 'comment'];
 
     if (! isset($args['entity']) || ! in_array($args['entity'], $valid_entities) ) {
-        $send_response(new \WP_Error("invalid_param", esc_html__("Invalid parameter: entity", 'entity-viewer')), 400);
+        $send_response(new WP_Error("invalid_param", esc_html__("Invalid parameter: entity", 'entity-viewer')), 400);
     }
 
     if (! isset($args['id']) || ! is_numeric($args['id'])) {
-        $send_response(new \WP_Error("invalid_param", esc_html__("Invalid parameter: id", 'entity-viewer')), 400);
+        $send_response(new WP_Error("invalid_param", esc_html__("Invalid parameter: id", 'entity-viewer')), 400);
     }
 
     $entity_name = $args['entity'];
     $item_id = absint($args['id']);
 
     if (! wp_verify_nonce($args['nonce'], get_refreshing_nonce_name($entity_name, $item_id))) {
-        $send_response(new \WP_Error("nonce_verification_failed", esc_html__("Nonce verification failed", 'entity-viewer')), 403);
+        $send_response(new WP_Error("nonce_verification_failed", esc_html__("Nonce verification failed", 'entity-viewer')), 403);
     }
 
     $fields_data = get_fields_data($entity_name, $item_id);
@@ -128,7 +142,7 @@ function handle_refreshing_data_via_ajax()
     $send_response($fields_data['fields']);
 }
 
-function render_metabox(array $data, string $entity_name, $item_id)
+function render_metabox(array $data, string $entity_name, $item_id): void
 {
 	add_action('admin_footer', '\\VsEntityViewer\\render_metabox_scripts', 200);
 
@@ -166,7 +180,7 @@ function render_metabox(array $data, string $entity_name, $item_id)
 	echo sprintf('<script type="text/javascript">window.vsm = %s;</script>' . PHP_EOL, json_encode($settings));
 }
 
-function register_post_meta_box($post_type)
+function register_post_meta_box($post_type): void
 {
     global $typenow;
 
@@ -183,7 +197,7 @@ function register_post_meta_box($post_type)
     );
 }
 
-function register_comment_meta_box()
+function register_comment_meta_box(): void
 {
     add_meta_box(
         'vsm-comment-meta',
@@ -202,7 +216,8 @@ function register_comment_meta_box()
 }
 
 
-function register_term_meta_box() {
+function register_term_meta_box(): void
+{
     global $pagenow, $taxnow;
 
     if ($pagenow === 'term.php' && $taxnow) {
@@ -210,14 +225,14 @@ function register_term_meta_box() {
     }
 }
 
-function render_metabox_scripts()
+function render_metabox_scripts(): void
 {
 	$url = plugins_url('assets/build/entity-viewer.build.js', __DIR__);
 	echo sprintf('<script type="text/javascript" src="%s"></script>', esc_attr($url));
 }
 
-function construct_meta_data_mapper($meta_id_key, & $has_serialized_values) {
-
+function construct_meta_data_mapper(string $meta_id_key, bool & $has_serialized_values): callable
+{
     return function (array $item) use ($meta_id_key, & $has_serialized_values) {
 
         $is_value_serialized = is_serialized($item['meta_value']);
@@ -237,7 +252,7 @@ function construct_meta_data_mapper($meta_id_key, & $has_serialized_values) {
     };
 }
 
-function get_meta_from_db($entity_name, $item_id) {
+function get_meta_from_db(string $entity_name, int $item_id) {
     global $wpdb;
 
     $table = $entity_name . 'meta';
@@ -276,7 +291,7 @@ function enqueue_scripts()
 /**
  * @see https://wordpress.org/support/article/roles-and-capabilities/#administrator
  */
-function is_plugin_allowed($user_id): bool
+function is_plugin_allowed(int $user_id): bool
 {
     $capability = is_multisite() ? 'manage_options' : 'create_users';
     $allowed = user_can($user_id, $capability);
@@ -290,7 +305,7 @@ function is_plugin_allowed($user_id): bool
  * @param string $domain   Text domain. Unique identifier for retrieving translated strings.
  * @param string $mofile   Path to the MO file.
  *
- * @return bool
+ * Note: it's not a good idea to use static typing here
  */
 function disable_i18n_for_plugin($override, $domain, $mofile)
 {
