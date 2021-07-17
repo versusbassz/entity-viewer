@@ -16,7 +16,8 @@ function show_metabox(object $item): void
     $entity_name = str_replace('wp_', '', strtolower($item_class));
 
     $id_property = get_id_property_for_entity($entity_name);
-    $item_id = $item->$id_property;
+    // WP_Post->ID in attachment metaboxes is string somehow (WP v5.7.2)
+    $item_id = (int) $item->$id_property;
 
     $fields_data = get_fields_data($entity_name, $item_id);
 
