@@ -35,22 +35,22 @@ function vsm_start_plugin() {
 }
 
 function vsm_display_php_requirement_notice() {
-	$message = esc_html__('The plugin "Entity viewer" doesn\'t support your PHP version and doesn\'t get initialized because of that.', 'entity-viewer');
-	vsm_display_admin_notice( $message );
+    $message = esc_html__('The plugin "Entity viewer" doesn\'t support your PHP version and doesn\'t get initialized because of that.', 'entity-viewer');
+    vsm_display_admin_notice($message);
 }
 
 function vsm_display_wp_core_requirement_notice() {
-	$message = esc_html__('The plugin "Entity viewer" doesn\'t support your WordPress version and doesn\'t get initialized because of that.', 'entity-viewer');
-	vsm_display_admin_notice( $message );
+    $message = esc_html__('The plugin "Entity viewer" doesn\'t support your WordPress version and doesn\'t get initialized because of that.', 'entity-viewer');
+    vsm_display_admin_notice($message);
 }
 
 function vsm_display_admin_notice($message) {
-	if (! $message) {
-		return;
-	}
+    if (! $message) {
+        return;
+    }
 
-	$class = 'notice notice-error is-dismissible';
-	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+    $class = 'notice notice-error is-dismissible';
+    printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
 }
 
 function vsm_init_plugin() {

@@ -10,8 +10,8 @@ if (! is_admin() || ! is_plugin_allowed(get_current_user_id())) {
 
 // AJAX-handler: Refresh metabox data
 if (wp_doing_ajax()) {
-	add_action('wp_ajax_vsm_refresh_data', '\\VsEntityViewer\\handle_refreshing_data_via_ajax');
-	return;
+    add_action('wp_ajax_vsm_refresh_data', '\\VsEntityViewer\\handle_refreshing_data_via_ajax');
+    return;
 }
 
 if (! apply_filters('vsm/is_i18n_enabled', true)) {

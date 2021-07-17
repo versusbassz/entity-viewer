@@ -36,7 +36,7 @@ function get_fields_data(string $entity_name, int $item_id): array
 {
     $meta_id_key = get_meta_id_column_for_entity($entity_name);
     $meta_raw = get_meta_from_db($entity_name, $item_id);
-	$has_serialized_values = false;
+    $has_serialized_values = false;
 
     $fields = array_map(
         construct_meta_data_mapper($meta_id_key, $has_serialized_values ),
@@ -87,7 +87,7 @@ function get_meta_id_column_for_entity(string $entity_name): string
  */
 function get_metabox_title_for_entity(string $entity_name): string
 {
-	return (string) __('Entity viewer', 'entity-viewer');
+    return (string) __('Entity viewer', 'entity-viewer');
 }
 
 function get_refreshing_nonce_name(string $entity_name, int $item_id): string
@@ -141,21 +141,21 @@ function handle_refreshing_data_via_ajax()
 
 function render_metabox(array $data, string $entity_name, $item_id): void
 {
-	add_action('admin_footer', '\\VsEntityViewer\\render_metabox_scripts', 200);
+    add_action('admin_footer', '\\VsEntityViewer\\render_metabox_scripts', 200);
 
-	echo '<div id="js-vsm-metabox"></div>' . PHP_EOL;
-	echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s"></div>' . PHP_EOL, esc_attr(json_encode($data)));
+    echo '<div id="js-vsm-metabox"></div>' . PHP_EOL;
+    echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s"></div>' . PHP_EOL, esc_attr(json_encode($data)));
 
     $nonce_name = get_refreshing_nonce_name($entity_name, $item_id);
-	$settings = [
-		'ajax_url' => get_admin_url(null, '/admin-ajax.php'),
-		'query_args' => [
-			'action' => 'vsm_refresh_data',
-			'entity' => $entity_name,
-			'id' => $item_id,
+    $settings = [
+        'ajax_url' => get_admin_url(null, '/admin-ajax.php'),
+        'query_args' => [
+            'action' => 'vsm_refresh_data',
+            'entity' => $entity_name,
+            'id' => $item_id,
             'nonce' => wp_create_nonce($nonce_name),
-		],
-	];
+        ],
+    ];
 
     $settings['i18n'] = [
         'search_placeholder' => esc_html__('Search', 'entity-viewer'),
@@ -174,7 +174,7 @@ function render_metabox(array $data, string $entity_name, $item_id): void
         'see_raw_value' => esc_html__('see the raw value for search results', 'entity-viewer'),
     ];
 
-	echo sprintf('<script type="text/javascript">window.vsm = %s;</script>' . PHP_EOL, json_encode($settings));
+    echo sprintf('<script type="text/javascript">window.vsm = %s;</script>' . PHP_EOL, json_encode($settings));
 }
 
 function register_post_meta_box($post_type): void
@@ -224,8 +224,8 @@ function register_term_meta_box(): void
 
 function render_metabox_scripts(): void
 {
-	$url = plugins_url('assets/build/entity-viewer.build.js', __DIR__);
-	echo sprintf('<script type="text/javascript" src="%s"></script>', esc_attr($url));
+    $url = plugins_url('assets/build/entity-viewer.build.js', __DIR__);
+    echo sprintf('<script type="text/javascript" src="%s"></script>', esc_attr($url));
 }
 
 function construct_meta_data_mapper(string $meta_id_key, bool & $has_serialized_values): callable
