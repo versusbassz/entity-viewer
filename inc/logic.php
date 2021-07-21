@@ -51,7 +51,7 @@ function get_fields_data(string $entity_name, int $item_id): array
 }
 
 /**
- * Returns a name of "entity"-id column in related meta table
+ * Returns a name of "entity"-id column in main (not meta) table
  * E.g., post -> post_id, user -> ID.
  */
 function get_id_property_for_entity(string $entity_name): string
