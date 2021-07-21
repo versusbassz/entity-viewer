@@ -5,11 +5,13 @@ import { dynamicSort, searchString, str } from "./utils";
 
 export const Metabox = () => {
   const [data, setData] = useState({});
+  const [initialStateLoaded, setInitialStateLoaded] = useState(false);
 
   // getting initial data
   useEffect(() => {
     const jsonData = document.getElementById('js-vsm-fields-data').value;
     setData(JSON.parse(jsonData));
+    setInitialStateLoaded(true);
   }, []);
 
   const refreshFields = async (setLoading, setLastUpdated, setShowDone) => {
@@ -48,7 +50,7 @@ export const Metabox = () => {
     setLoading(false);
   };
 
-  if (! data.fields) {
+  if (! initialStateLoaded) {
     return <div>{str("loading_initial_state")}</div>;
   }
 
