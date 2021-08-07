@@ -43,6 +43,10 @@
     &__refresh {
         margin-left: 40px;
     }
+
+    &__tabs-switcher {
+        margin-left: 40px;
+    }
 }
 
 .vsm-search {
@@ -75,8 +79,57 @@
     }
 }
 
+.vsm-tabs-switcher {
+    display: flex;
+    align-content: center;
+    min-height: 30px; // same as in .button-secondary
+
+    &__item {
+        display: flex;
+        align-items: center;
+        padding: 0 3px;
+
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        &_active {
+            font-weight: bold;
+        }
+    }
+}
+
 .vsm-highlighted {
     background-color: #fca;
+}
+
+.vsm-tabs-contents {
+    margin-bottom: 10px;
+}
+
+.vsm-tab-content {
+    margin-top: 20px;
+    margin-bottom: 30px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &__title {
+        margin-bottom: 10px;
+        padding-left: 1px;
+        font-weight: bold;
+
+        &:before {
+            content: '== ';
+            opacity: 0.3;
+        }
+    }
 }
 
 .vsm-table {

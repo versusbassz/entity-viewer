@@ -54,6 +54,7 @@ function vsm_display_admin_notice($message) {
 }
 
 function vsm_init_plugin() {
+    require_once __DIR__ . '/src/Fetcher/EntityFetcher.php';
     require_once __DIR__ . '/inc/logic.php';
     require_once __DIR__ . '/inc/init.php';
 }

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace VsEntityViewer;
 
 use WP_Error;
+use VsEntityViewer\Fetcher\EntityFetcher;
 
 defined('ABSPATH') || exit;
 
@@ -18,19 +19,69 @@ function show_metabox(object $item): void
     $id_property = get_id_property_for_entity($entity_name);
     // WP_Post->ID in attachment metaboxes is string somehow (WP v5.7.2)
     $item_id = (int) $item->$id_property;
+    $payload = get_metabox_payload($entity_name, $item_id);
 
-    $fields_data = get_fields_data($entity_name, $item_id);
+    $nonce_name = get_refreshing_nonce_name($entity_name, $item_id);
 
     $data = [
-        'metabox_type' => in_array($entity_name, ['post', 'comment']) ? 'content' : 'full',
-        'metabox_header' => get_metabox_title_for_entity($entity_name),
-        'has_serialized_values' => $fields_data['has_serialized_values'],
-        'entity_type' => $entity_name,
-        'fields' => $fields_data['fields'],
-        'fetched_initial' => time(),
+        'global' => [
+            'ajax_url' => get_admin_url(null, '/admin-ajax.php'),
+            'i18n' => [
+                'search_placeholder' => esc_html__('Search', 'entity-viewer'),
+                'refresh_data' => esc_html__('Refresh data', 'entity-viewer'),
+                'loading' => esc_html__('Loading...', 'entity-viewer'),
+                'done' => esc_html__('Done!', 'entity-viewer'),
+                'tabs_all' => esc_html__('All', 'entity-viewer'),
+                'tabs_not_found' => esc_html__('There are no tabs to display.', 'entity-viewer'),
+                'last_updated' => esc_html__('Last updated', 'entity-viewer'),
+                'th_id' => esc_html__('Meta id', 'entity-viewer'),
+                'th_key' => esc_html__('Key', 'entity-viewer'),
+                'th_value' => esc_html__('Value', 'entity-viewer'),
+                'incorrect_response' => esc_html__('Incorrect response, see dev-tools (console) for details', 'entity-viewer'),
+                'http_error' => esc_html__('HTTP error: {{status}}, see dev-tools (console) for details', 'entity-viewer'),
+                'loading_initial_state' => esc_html__('The initial state is loading...', 'entity-viewer'),
+                'fields_not_found' => esc_html__('There are no meta fields for this item.', 'entity-viewer'),
+                'fields_not_found_for_search_query' => esc_html__('There are no meta fields for this search query.', 'entity-viewer'),
+                'see_raw_value' => esc_html__('see the raw value for search results', 'entity-viewer'),
+            ],
+        ],
+        'metabox' => [
+            'metabox_type' => in_array($entity_name, ['post', 'comment']) ? 'content' : 'full',
+            'metabox_header' => get_metabox_title_for_entity($entity_name),
+            'entity_type' => $entity_name,
+            'fetched_initial' => time(),
+            'fetched_initial_visual' => date('Y-m-d H:i:s P'),
+            'query_args' => [
+                'action' => 'vsm_refresh_data',
+                'entity' => $entity_name,
+                'id' => $item_id,
+                'nonce' => wp_create_nonce($nonce_name),
+            ],
+        ],
+        'tabs' => $payload,
     ];
 
-    render_metabox($data, $entity_name, $item_id);
+    render_metabox($data);
+}
+
+/**
+ * Returns data for tabs in the metabox
+ */
+function get_metabox_payload(string $entity_name, int $item_id): array
+{
+    // TODO smth with WP_Error ???
+    $entity_data = EntityFetcher::getData($entity_name, $item_id);
+    $fields_data = get_fields_data($entity_name, $item_id);
+
+    return [
+        'entity' => [
+            'fields' => $entity_data['fields'],
+        ],
+        'meta' => [
+            'fields' => $fields_data['fields'],
+            'has_serialized_values' => $fields_data['has_serialized_values'], // TODO not used in JS for now
+        ],
+    ];
 }
 
 function get_fields_data(string $entity_name, int $item_id): array
@@ -46,7 +97,7 @@ function get_fields_data(string $entity_name, int $item_id): array
 
     return [
         'fields' => $fields,
-        'has_serialized_values' => $has_serialized_values
+        'has_serialized_values' => $has_serialized_values,
     ];
 }
 
@@ -98,10 +149,8 @@ function get_refreshing_nonce_name(string $entity_name, int $item_id): string
 
 /**
  * AJAX-handler for "Refresh data"
- *
- * @return WP_Error|array
  */
-function handle_refreshing_data_via_ajax()
+function handle_refreshing_data_via_ajax(): void
 {
     $send_response = function($raw_data, int $status = 200) {
         $is_error = is_wp_error($raw_data);
@@ -135,47 +184,33 @@ function handle_refreshing_data_via_ajax()
         $send_response(new WP_Error("nonce_verification_failed", esc_html__("Nonce verification failed", 'entity-viewer')), 403);
     }
 
-    $fields_data = get_fields_data($entity_name, $item_id);
+    $payload = get_metabox_payload($entity_name, $item_id);
 
-    $send_response($fields_data['fields']);
+    $send_response([
+        'tabs' => $payload,
+    ]);
 }
 
-function render_metabox(array $data, string $entity_name, $item_id): void
+function render_metabox(array $data): void
 {
     add_action('admin_footer', '\\VsEntityViewer\\render_metabox_scripts', 200);
 
     echo '<div id="js-vsm-metabox"></div>' . PHP_EOL;
-    echo sprintf('<input type="hidden" id="js-vsm-fields-data" style="display: none !important;" value="%s"></div>' . PHP_EOL, esc_attr(json_encode($data)));
+    echo render_hidden_input('js-vsm-tabs-data', [
+        'metabox' => $data['metabox'],
+        'tabs' => $data['tabs'],
+    ]);
 
-    $nonce_name = get_refreshing_nonce_name($entity_name, $item_id);
-    $settings = [
-        'ajax_url' => get_admin_url(null, '/admin-ajax.php'),
-        'query_args' => [
-            'action' => 'vsm_refresh_data',
-            'entity' => $entity_name,
-            'id' => $item_id,
-            'nonce' => wp_create_nonce($nonce_name),
-        ],
-    ];
+    echo sprintf('<script type="text/javascript">window.vsm = %s;</script>' . PHP_EOL, json_encode($data['global']));
+}
 
-    $settings['i18n'] = [
-        'search_placeholder' => esc_html__('Search', 'entity-viewer'),
-        'refresh_data' => esc_html__('Refresh data', 'entity-viewer'),
-        'loading' => esc_html__('Loading...', 'entity-viewer'),
-        'done' => esc_html__('Done!', 'entity-viewer'),
-        'last_updated' => esc_html__('Last updated', 'entity-viewer'),
-        'th_id' => esc_html__('Meta id', 'entity-viewer'),
-        'th_key' => esc_html__('Key', 'entity-viewer'),
-        'th_value' => esc_html__('Value', 'entity-viewer'),
-        'incorrect_response' => esc_html__('Incorrect response, see dev-tools (console) for details', 'entity-viewer'),
-        'http_error' => esc_html__('HTTP error: {{status}}, see dev-tools (console) for details', 'entity-viewer'),
-        'loading_initial_state' => esc_html__('The initial state is loading...', 'entity-viewer'),
-        'fields_not_found' => esc_html__('There are no meta fields for this item.', 'entity-viewer'),
-        'fields_not_found_for_search_query' => esc_html__('There are no meta fields for this search query.', 'entity-viewer'),
-        'see_raw_value' => esc_html__('see the raw value for search results', 'entity-viewer'),
-    ];
-
-    echo sprintf('<script type="text/javascript">window.vsm = %s;</script>' . PHP_EOL, json_encode($settings));
+function render_hidden_input($id, $data): string
+{
+    return sprintf(
+        '<input type="hidden" id="%s" style="display: none !important;" value="%s"></div>' . PHP_EOL,
+        esc_attr($id),
+        esc_attr(json_encode($data))
+    );
 }
 
 function register_post_meta_box($post_type): void
@@ -305,6 +340,8 @@ function is_plugin_allowed(int $user_id): bool
  * @param bool   $override Whether to override the .mo file loading. Default false.
  * @param string $domain   Text domain. Unique identifier for retrieving translated strings.
  * @param string $mofile   Path to the MO file.
+ *
+ * @return bool
  *
  * Note: it's not a good idea to use static typing here
  */

@@ -39,14 +39,3 @@ export function dynamicSortMultiple() {
     return result;
   }
 }
-
-export function searchString(needle, haystack) {
-  return haystack.toLowerCase().includes(needle.toLowerCase())
-}
-
-/**
- * Outputs a localized string by its id
- */
-export function str(str_id) {
-  return window?.vsm?.i18n?.[str_id];
-}

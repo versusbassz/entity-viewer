@@ -2,8 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import "../styles/main.scss";
-import { Metabox } from "./Metabox";
+
+import { MetaboxContextProvider } from "./context";
+import { MetaboxHOC } from "./components/metabox/MetaboxHOC";
 
 window.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<Metabox />, document.getElementById("js-vsm-metabox"));
+  const metabox_node = document.getElementById("js-vsm-metabox");
+
+  if (metabox_node) {
+    ReactDOM.render((
+      <MetaboxContextProvider>
+        <MetaboxHOC />
+      </MetaboxContextProvider>
+    ), metabox_node);
+  }
 });
