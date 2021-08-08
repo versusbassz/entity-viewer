@@ -18,8 +18,6 @@ export const EntityPropsTable = ({ fieldsData, search }) => {
 
   const fields = fieldsData?.fields ?? [];
 
-  console.log(fieldsData);
-
   if (! fields.length) {
     return <div className="vsm-message vsm-message_type_not-exists">{str("fields_not_found")}</div>;
   }

@@ -16,7 +16,6 @@ export const MetaboxContent = () => {
   const [currentTab, setCurrentTab] = useState("all");
 
   const handleTabChange = tab_id => {
-    console.log(tab_id);
     setCurrentTab(tab_id);
   };
 

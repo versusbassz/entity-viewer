@@ -15,8 +15,6 @@ import { str } from "../../utils/i18n";
 export const MetaboxHOC = () => {
   const { initialStateLoaded, metaboxSettings: { metabox_type } } = useMetaboxContext();
 
-  console.log("context", useMetaboxContext());
-
   if (! initialStateLoaded) {
     return <div>{str("loading_initial_state")}</div>;
   }
