@@ -5,6 +5,7 @@ namespace VsEntityViewer;
 
 use WP_Error;
 use VsEntityViewer\Fetcher\EntityFetcher;
+use VsEntityViewer\Fetcher\MetaFetcher;
 
 defined('ABSPATH') || exit;
 
@@ -71,33 +72,16 @@ function get_metabox_payload(string $entity_name, int $item_id): array
 {
     // TODO smth with WP_Error ???
     $entity_data = EntityFetcher::getData($entity_name, $item_id);
-    $fields_data = get_fields_data($entity_name, $item_id);
+    $meta_data = MetaFetcher::getData($entity_name, $item_id);
 
     return [
         'entity' => [
             'fields' => $entity_data['fields'],
         ],
         'meta' => [
-            'fields' => $fields_data['fields'],
-            'has_serialized_values' => $fields_data['has_serialized_values'], // TODO not used in JS for now
+            'fields' => $meta_data['fields'],
+            'has_serialized_values' => $meta_data['has_serialized_values'], // not used in JS for now
         ],
-    ];
-}
-
-function get_fields_data(string $entity_name, int $item_id): array
-{
-    $meta_id_key = get_meta_id_column_for_entity($entity_name);
-    $meta_raw = get_meta_from_db($entity_name, $item_id);
-    $has_serialized_values = false;
-
-    $fields = array_map(
-        construct_meta_data_mapper($meta_id_key, $has_serialized_values ),
-        $meta_raw
-    );
-
-    return [
-        'fields' => $fields,
-        'has_serialized_values' => $has_serialized_values,
     ];
 }
 
@@ -283,22 +267,6 @@ function construct_meta_data_mapper(string $meta_id_key, bool & $has_serialized_
             'value' => $item['meta_value'],
         ];
     };
-}
-
-function get_meta_from_db(string $entity_name, int $item_id) {
-    global $wpdb;
-
-    $table = $entity_name . 'meta';
-
-    return $wpdb->get_results(
-        $wpdb->prepare("
-            SELECT *
-            FROM {$wpdb->$table}
-            WHERE {$entity_name}_id = %d
-            ORDER BY meta_key ASC
-        ", $item_id),
-        ARRAY_A
-    );
 }
 
 /**

@@ -52,8 +52,8 @@ class EntityFetcher
             ARRAY_A
         );
 
-        if (is_null($result)) {
-            return new WP_Error('empty_entity_db_response');
+        if (! is_array($result)) {
+            return new WP_Error('incorrect_entity_db_response');
         }
 
         return $result;
