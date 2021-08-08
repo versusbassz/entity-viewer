@@ -20,12 +20,15 @@ class EntityFetcher
         }
 
         $fields = [];
+        $index = 0;
 
         foreach ($data as $key => $value) {
             $fields[] = [
                 'key' => $key,
                 'value' => $value,
+                'db_order' => $index,
             ];
+            ++$index;
         }
 
         return [

@@ -38,6 +38,7 @@ function show_metabox(object $item): void
                 'th_id' => esc_html__('Meta id', 'entity-viewer'),
                 'th_key' => esc_html__('Key', 'entity-viewer'),
                 'th_value' => esc_html__('Value', 'entity-viewer'),
+                'th_db_order' => esc_html__('DB Order', 'entity-viewer'),
                 'incorrect_response' => esc_html__('Incorrect response, see dev-tools (console) for details', 'entity-viewer'),
                 'http_error' => esc_html__('HTTP error: {{status}}, see dev-tools (console) for details', 'entity-viewer'),
                 'loading_initial_state' => esc_html__('The initial state is loading...', 'entity-viewer'),

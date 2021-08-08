@@ -9,7 +9,7 @@ import { searchString } from "../../utils/strings";
 export const EntityPropsTable = ({ fieldsData, search }) => {
   const [ ui, setUI ] = useState({
     sorting: {
-      column: "key",
+      column: "db_order",
       dir: "asc",
     },
   });
@@ -49,7 +49,7 @@ export const EntityPropsTable = ({ fieldsData, search }) => {
     fieldsSorted = fieldsSorted.filter((field) => {
       let contains = false;
 
-      ['key', 'value'].forEach((field_name) => {
+      ['db_order', 'key', 'value'].forEach((field_name) => {
         let value = Number.isInteger(field[field_name]) ? field[field_name].toString(10) : String(field[field_name]);
 
         if (! contains && searchString(search, value)) {
@@ -71,6 +71,14 @@ export const EntityPropsTable = ({ fieldsData, search }) => {
       <tr>
         <th
           className="vsm-table__column vsm-table__column_sortable"
+          onClick={() => sortFields("db_order")}
+        >
+          {str("th_db_order")}
+          <SortingArrow show={ui.sorting.column === "db_order"} dir={ui.sorting.dir} />
+        </th>
+
+        <th
+          className="vsm-table__column vsm-table__column_sortable"
           onClick={() => sortFields("key")}
         >
           {str("th_key")}
@@ -87,6 +95,11 @@ export const EntityPropsTable = ({ fieldsData, search }) => {
 
         return (
           <tr key={item.key} className="vsm-table__row">
+
+            {/* The empty column for "DB order" sorting */}
+            <td className="vsm-table__column vsm-table__column_type_td vsm-table__column_content_db-order">
+              {item.db_order + 1}
+            </td>
 
             <td className="vsm-table__column vsm-table__column_type_td">
               <CellContent value={item.key} search={search} />
@@ -116,6 +129,7 @@ export const EntityPropsTable = ({ fieldsData, search }) => {
                 </div>
               )}
             </td>
+
           </tr>
         );
       })}
