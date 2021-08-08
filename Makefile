@@ -24,6 +24,7 @@ release:
 	cp -r ./assets/build ./dist/entity-viewer/assets
 
 	cp -r ./inc ./dist/entity-viewer/
+	cp -r ./src ./dist/entity-viewer/
 	cd ./dist && zip -r entity-viewer.zip entity-viewer
 
 wp-core-download:
