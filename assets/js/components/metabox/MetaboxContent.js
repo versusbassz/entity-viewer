@@ -79,15 +79,15 @@ export const MetaboxContent = () => {
 
           switch(key) {
             case "entity": return (
-              <div className="vsm-tab-content">
+              <div className="vsm-tab-content" key={key}>
                 <div className="vsm-tab-content__title">Section: {key}</div>
-                <EntityPropsTable key={key} search={search} fieldsData={data} />
+                <EntityPropsTable search={search} fieldsData={data} />
               </div>
             );
             case "meta": return (
-              <div className="vsm-tab-content">
+              <div className="vsm-tab-content" key={key}>
                 <div className="vsm-tab-content__title">Section: {key}</div>
-                <MetaTable key={key} search={search} fieldsData={data} />
+                <MetaTable search={search} fieldsData={data} />
               </div>
             );
             default: return <p key={key}>Unknown tab: {key}</p>;
