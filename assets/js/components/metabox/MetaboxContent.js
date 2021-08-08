@@ -5,6 +5,7 @@ import { MetaTable } from "../tables/MetaTable";
 import { RefreshButton } from "../misc/RefreshButton";
 import { Tabs } from "../misc/Tabs";
 import { useMetaboxContext } from "../../context";
+import { useCurrentTabStorage } from "../../hooks/useCurrentTabStorage";
 import { str } from "../../utils/i18n";
 
 export const MetaboxContent = () => {
@@ -14,6 +15,8 @@ export const MetaboxContent = () => {
 
   // Tabs
   const [currentTab, setCurrentTab] = useState("all");
+
+  useCurrentTabStorage(metaboxSettings.entity_type, currentTab, setCurrentTab);
 
   const handleTabChange = tab_id => {
     setCurrentTab(tab_id);
