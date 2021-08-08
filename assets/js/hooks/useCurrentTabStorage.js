@@ -7,7 +7,7 @@ export const useCurrentTabStorage = (entityType, currentTab, setCurrentTab) => {
   useEffect(() => {
     const storedValues = getStorageValue();
 
-    if (! storedValues[entityType]) {
+    if (! storedValues || ! storedValues[entityType]) {
       return;
     }
 
