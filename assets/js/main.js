@@ -11,9 +11,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (metabox_node) {
     ReactDOM.render((
-      <MetaboxContextProvider>
-        <MetaboxHOC />
-      </MetaboxContextProvider>
+      <React.StrictMode>
+        <MetaboxContextProvider>
+          <MetaboxHOC />
+        </MetaboxContextProvider>
+      </React.StrictMode>
     ), metabox_node);
   }
 });
