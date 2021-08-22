@@ -245,7 +245,22 @@ function register_term_meta_box(): void
 
 function render_metabox_scripts(): void
 {
-    $url = plugins_url('assets/build/entity-viewer.build.js', __DIR__);
+    $asset_rel_path = 'assets/build/entity-viewer.build.js';
+    $asset_url = plugin_dir_url(ENTITY_VIEWER_ENTRY_FILE_PATH) . $asset_rel_path;
+    $asset_path = plugin_dir_path(ENTITY_VIEWER_ENTRY_FILE_PATH) . $asset_rel_path;
+
+    if (defined('ENVITY_VIEWER_DISABLE_ASSETS_CACHING') && ENVITY_VIEWER_DISABLE_ASSETS_CACHING) {
+        $version = time();
+    } else if (strpos(ENTITY_VIEWER_PLUGIN_VERSION, 'alpha') !== false) {
+        $version = ENTITY_VIEWER_PLUGIN_VERSION . '-' . get_asset_modified_time($asset_path);
+    } else {
+        $version = ENTITY_VIEWER_PLUGIN_VERSION;
+    }
+
+    $url = add_query_arg([
+        'v' => $version,
+    ], $asset_url);
+
     echo sprintf('<script type="text/javascript" src="%s"></script>', esc_attr($url));
 }
 
@@ -321,4 +336,22 @@ function disable_i18n_for_plugin($override, $domain, $mofile)
     }
 
     return $override;
+}
+
+/**
+ * Returns mtime/ctime of a file (depending on what is later)
+ *
+ * Some people argue that ctime can't be more than mtime.
+ * Sorry, it's possible. I had this issue on some servers with SSH/SFTP.
+ *
+ * @param string $file_path Path to a file
+ *
+ * @return false|int
+ */
+function get_asset_modified_time(string $file_path)
+{
+    $mtime = filemtime($file_path);
+    $ctime = filectime($file_path);
+
+    return $mtime > $ctime ? $mtime : $ctime;
 }

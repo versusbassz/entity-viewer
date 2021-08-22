@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin name: Entity viewer
-Version: 0.2.1
+Version: 0.3.0-alpha
 Requires at least: 5.6.4
 Requires PHP: 7.3
 Text Domain: entity-viewer
@@ -10,6 +10,9 @@ Global PHP prefix: vsm
 */
 
 defined('ABSPATH') || exit;
+
+define('ENTITY_VIEWER_PLUGIN_VERSION',  '0.3.0-alpha');
+define('ENTITY_VIEWER_ENTRY_FILE_PATH', __FILE__);
 
 vsm_start_plugin();
 
