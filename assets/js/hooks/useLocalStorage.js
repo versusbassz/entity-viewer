@@ -1,4 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import ls from 'localstorage-slim';
+
+import { CONSOLE_PREFIX, LS_TTL } from "../constants";
 
 export const useLocalStorage = (initialValue, key, subKey) => {
   const [currentValue, setCurrentValue] = useState(initialValue);
@@ -39,11 +42,11 @@ export const useLocalStorage = (initialValue, key, subKey) => {
 
     storageItems[subKey] = currentValue;
 
-    localStorage.setItem(key, JSON.stringify(storageItems));
+    ls.set(key, JSON.stringify(storageItems), {ttl: LS_TTL});
   }, [currentValue]);
 
   const getStorageValue = () => {
-    const rawData = localStorage.getItem(key);
+    const rawData = ls.get(key);
     if (rawData === null) {
       return null;
     }
@@ -51,7 +54,8 @@ export const useLocalStorage = (initialValue, key, subKey) => {
     try {
       return JSON.parse(rawData);
     } catch (e) {
-      localStorage.removeItem(key);
+      console.error(`${CONSOLE_PREFIX} Error during parsing localStorage value`, rawData)
+      ls.remove(key);
       return null;
     }
   };
