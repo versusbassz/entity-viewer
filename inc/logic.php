@@ -77,9 +77,13 @@ function get_metabox_payload(string $entity_name, int $item_id): array
 
     return [
         'entity' => [
+            'tab_title' => $entity_data['tab_title'],
+            'section_title' => $entity_data['section_title'],
             'fields' => $entity_data['fields'],
         ],
         'meta' => [
+            'tab_title' => $meta_data['tab_title'],
+            'section_title' => $meta_data['section_title'],
             'fields' => $meta_data['fields'],
             'has_serialized_values' => $meta_data['has_serialized_values'], // not used in JS for now
         ],

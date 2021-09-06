@@ -25,7 +25,7 @@ export const MetaboxContent = () => {
   }
 
   let tabsData = Object.keys(tabs).map(id => {
-    return {id, title: id};
+    return {id, title: tabs[id].tab_title};
   });
   tabsData = [{id: "all", title: str("tabs_all")}, ...tabsData];
 
@@ -81,13 +81,13 @@ export const MetaboxContent = () => {
           switch(key) {
             case "entity": return (
               <div className="vsm-tab-content" key={key}>
-                <div className="vsm-tab-content__title">Section: {key}</div>
+                <div className="vsm-tab-content__title">Section: {data.section_title}</div>
                 <EntityPropsTable search={search} fieldsData={data} />
               </div>
             );
             case "meta": return (
               <div className="vsm-tab-content" key={key}>
-                <div className="vsm-tab-content__title">Section: {key}</div>
+                <div className="vsm-tab-content__title">Section: {data.section_title}</div>
                 <MetaTable search={search} fieldsData={data} />
               </div>
             );

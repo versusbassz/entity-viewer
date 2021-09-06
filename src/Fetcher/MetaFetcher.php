@@ -29,6 +29,8 @@ class MetaFetcher
         );
 
         return [
+            'tab_title' => __('Meta', 'entity-viewer'),
+            'section_title' => __('Meta', 'entity-viewer'),
             'fields' => $fields,
             'has_serialized_values' => $has_serialized_values,
         ];

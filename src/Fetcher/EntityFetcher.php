@@ -32,6 +32,8 @@ class EntityFetcher
         }
 
         return [
+            'tab_title' => __('Props', 'entity-viewer'),
+            'section_title' => __('Props', 'entity-viewer'),
             'fields' => $fields,
         ];
     }
