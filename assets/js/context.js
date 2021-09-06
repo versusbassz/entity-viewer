@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { str } from "./utils/i18n";
+import { CONSOLE_PREFIX } from "./constants";
 
 // refreshing metabox data dynamically (via AJAX)
 const getRefreshTabsCallback = (setTabs, metaboxSettings) => async (setLoading, setLastUpdated, setShowDone) => {
@@ -32,11 +33,11 @@ const getRefreshTabsCallback = (setTabs, metaboxSettings) => async (setLoading, 
       setLastUpdated(Date.now());
       setShowDone(true);
     } else {
-      alert('[Entity viewer] ' + str("incorrect_response"));
+      alert(`${CONSOLE_PREFIX} ` + str("incorrect_response"));
       log(json);
     }
   } else {
-    alert('[Entity viewer] ' + str("http_error").replace('{{status}}', response.status));
+    alert(`${CONSOLE_PREFIX} ` + str("http_error").replace('{{status}}', response.status));
     log(await response.text());
   }
 
