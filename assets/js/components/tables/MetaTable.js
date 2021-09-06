@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { SortingArrow } from "./SortingArrow";
 import { ToggleButton } from "./ToggleButton";
 import { CellContent } from "./CellContent";
+import { Quote } from "./Quote";
 import { str } from "../../utils/i18n";
 import { searchString } from "../../utils/strings";
 import { dynamicSort } from "../../utils/sorting";
@@ -158,9 +159,9 @@ export const MetaTable = ({ fieldsData, search }) => {
                     <span className="vsm-null">null</span>
                   ) : (
                     <>
-                      &#39;
+                      <Quote />
                       <CellContent value={item.value} search={search} />
-                      &#39;
+                      <Quote />
                     </>
                   )}
                 </div>

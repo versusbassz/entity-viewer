@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { SortingArrow } from "./SortingArrow";
 import { CellContent } from "./CellContent";
+import { Quote } from "./Quote";
 import { str } from "../../utils/i18n";
 import { dynamicSort } from "../../utils/sorting";
 import { searchString } from "../../utils/strings";
@@ -120,9 +121,9 @@ export const EntityPropsTable = ({ fieldsData, search }) => {
                     <span className="vsm-null">null</span>
                   ) : (
                     <>
-                      &#39;
+                      <Quote />
                       <CellContent value={item.value} search={search} />
-                      &#39;
+                      <Quote />
                     </>
                   )}
                 </div>

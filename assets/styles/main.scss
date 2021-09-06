@@ -237,6 +237,15 @@
     }
 }
 
+.vsm-quote {
+    opacity: 0.75;
+
+    // see: https://stackoverflow.com/questions/190396/adding-html-entities-using-css-content
+    &:before {
+        content: '\0027'; // &#39; - single quote
+    }
+}
+
 .vsm-pretty-code-button {
     display: inline-block;
     border:1px solid #e2e2e2;
