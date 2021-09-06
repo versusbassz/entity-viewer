@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
+import React from "react";
 
 import { MetaboxContent } from "./MetaboxContent";
 import { useMetaboxContext } from "../../context";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 /**
  * The whole metabox (including the header section and the toggleable body)
@@ -10,24 +10,7 @@ import { useMetaboxContext } from "../../context";
 export const Metabox = () => {
   const { metaboxSettings: { entity_type, metabox_header } } = useMetaboxContext();
 
-  const statusValues = ['opened', 'closed'];
-  const cookieName =  'vsm-metabox-status--' + entity_type;
-
-  const [status, setStatus] = useState("opened");
-
-  // set initial toggle status from Cookie
-  useEffect(() => {
-    const savedStatus = Cookies.get(cookieName);
-
-    if (savedStatus && statusValues.includes(savedStatus)) {
-      setStatus(savedStatus);
-    }
-  }, []);
-
-  // change cookie on every change of toggle status
-  useEffect(() => {
-    Cookies.set(cookieName, status, {expires: 7});
-  }, [status]);
+  const [status, setStatus] = useLocalStorage("opened", "vsm-metabox-status", entity_type);
 
   const contentClasses = ["vsm-metabox__content"];
   status === "closed" && contentClasses.push("vsm-metabox__content_closed");
