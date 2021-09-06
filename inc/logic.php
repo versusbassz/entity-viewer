@@ -45,6 +45,7 @@ function show_metabox(object $item): void
                 'fields_not_found' => esc_html__('There are no meta fields for this item.', 'entity-viewer'),
                 'fields_not_found_for_search_query' => esc_html__('There are no meta fields for this search query.', 'entity-viewer'),
                 'see_raw_value' => esc_html__('see the raw value for search results', 'entity-viewer'),
+                'error' => esc_html__('Error', 'entity-viewer'),
             ],
         ],
         'metabox' => [
@@ -71,22 +72,12 @@ function show_metabox(object $item): void
  */
 function get_metabox_payload(string $entity_name, int $item_id): array
 {
-    // TODO smth with WP_Error ???
     $entity_data = EntityFetcher::getData($entity_name, $item_id);
     $meta_data = MetaFetcher::getData($entity_name, $item_id);
 
     return [
-        'entity' => [
-            'tab_title' => $entity_data['tab_title'],
-            'section_title' => $entity_data['section_title'],
-            'fields' => $entity_data['fields'],
-        ],
-        'meta' => [
-            'tab_title' => $meta_data['tab_title'],
-            'section_title' => $meta_data['section_title'],
-            'fields' => $meta_data['fields'],
-            'has_serialized_values' => $meta_data['has_serialized_values'], // not used in JS for now
-        ],
+        'entity' => $entity_data,
+        'meta' => $meta_data,
     ];
 }
 

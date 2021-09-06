@@ -8,15 +8,20 @@ use function VsEntityViewer\get_id_property_for_entity;
 
 class EntityFetcher
 {
-    /**
-     * @return array|WP_Error
-     */
-    public static function getData(string $entity_name, int $item_id)
+    public static function getData(string $entity_name, int $item_id): array
     {
+        $result = [
+            'tab_title' => __('Props', 'entity-viewer'),
+            'section_title' => __('Props', 'entity-viewer'),
+            'fields' => [],
+            'error' => false,
+        ];
+
         $data = self::fetchDataFromDB($entity_name, $item_id);
 
         if (is_wp_error($data)) {
-            return $data;
+            $result['error'] = $data->get_error_code();
+            return $result;
         }
 
         $fields = [];
@@ -31,11 +36,9 @@ class EntityFetcher
             ++$index;
         }
 
-        return [
-            'tab_title' => __('Props', 'entity-viewer'),
-            'section_title' => __('Props', 'entity-viewer'),
-            'fields' => $fields,
-        ];
+        $result['fields'] = $fields;
+
+        return $result;
     }
 
     /**

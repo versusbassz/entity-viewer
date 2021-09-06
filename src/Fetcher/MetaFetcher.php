@@ -9,31 +9,35 @@ use function VsEntityViewer\get_meta_id_column_for_entity;
 
 class MetaFetcher
 {
-    /**
-     * @return array|WP_Error
-     */
-    public static function getData(string $entity_name, int $item_id)
+    public static function getData(string $entity_name, int $item_id): array
     {
-        $has_serialized_values = false;
-
         $meta_id_key = get_meta_id_column_for_entity($entity_name);
         $meta_raw = self::fetchDataFromDB($entity_name, $item_id);
 
+        $result = [
+            'tab_title' => __('Meta', 'entity-viewer'),
+            'section_title' => __('Meta', 'entity-viewer'),
+            'fields' => [],
+            'error' => false,
+            'has_serialized_values' => false, // not used in JS for now
+        ];
+
         if (is_wp_error($meta_raw)) {
-            return $meta_raw;
+            $result['error'] = $meta_raw->get_error_code();
+            return $result;
         }
+
+        $has_serialized_values = false;
 
         $fields = array_map(
             construct_meta_data_mapper($meta_id_key, $has_serialized_values),
             $meta_raw
         );
 
-        return [
-            'tab_title' => __('Meta', 'entity-viewer'),
-            'section_title' => __('Meta', 'entity-viewer'),
-            'fields' => $fields,
-            'has_serialized_values' => $has_serialized_values,
-        ];
+        $result['fields'] = $fields;
+        $result['has_serialized_values'] = $has_serialized_values;
+
+        return $result;
     }
 
     /**

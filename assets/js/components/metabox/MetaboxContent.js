@@ -78,23 +78,31 @@ export const MetaboxContent = () => {
             return null;
           }
 
-          switch(key) {
-            case "entity": return (
-              <div className="vsm-tab-content" key={key}>
-                <div className="vsm-tab-content__title">Section: {data.section_title}</div>
-                <EntityPropsTable search={search} fieldsData={data} />
-              </div>
-            );
-            case "meta": return (
-              <div className="vsm-tab-content" key={key}>
-                <div className="vsm-tab-content__title">Section: {data.section_title}</div>
-                <MetaTable search={search} fieldsData={data} />
-              </div>
-            );
-            default: return <p key={key}>Unknown tab: {key}</p>;
-          }
+          return (
+            <TabContent key={key} title={data.section_title} error={data.error}>
+              {key === "entity" && <EntityPropsTable search={search} fieldsData={data} />}
+              {key === "meta" && <MetaTable search={search} fieldsData={data} />}
+            </TabContent>
+          );
         })}
       </div>
     </>
   );
 }
+
+const TabContent = ({ children, title, error }) => {
+  return (
+    <div className="vsm-tab-content">
+      <div className="vsm-tab-content__title">Section: {title}</div>
+
+      {error ? (
+        <div className="notice notice-error inline">
+          <p>{str("error")}: {error}</p>
+        </div>
+      ) : (
+        <>{children}</>
+      )}
+
+    </div>
+  );
+};
