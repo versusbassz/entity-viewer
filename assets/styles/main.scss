@@ -150,6 +150,8 @@
         text-align:left;
 
         &_sortable {
+            white-space: nowrap;
+
             &:hover{
                 cursor: pointer;
             }

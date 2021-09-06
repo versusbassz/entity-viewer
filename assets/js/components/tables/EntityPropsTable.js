@@ -70,9 +70,10 @@ export const EntityPropsTable = ({ fieldsData, search }) => {
         <th
           className="vsm-table__column vsm-table__column_sortable"
           onClick={() => sortFields("db_order")}
+          style={{minWidth: "20px"}}
         >
-          {str("th_db_order")}
-          <SortingArrow show={ui.sorting.column === "db_order"} dir={ui.sorting.dir} />
+          <span title={str("th_db_order")} style={{opacity: 0.3}}>-</span>{/*
+          */}<SortingArrow show={ui.sorting.column === "db_order"} dir={ui.sorting.dir} />
         </th>
 
         <th
