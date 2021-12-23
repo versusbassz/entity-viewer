@@ -9,8 +9,6 @@ import { str } from "../../utils/i18n";
  * The root component.
  * It's HOC, loads the full metabox (with header & toggling) or only its content
  * depending on a type of an admin page.
- *
- * Contains root state of a metabox.
  */
 export const MetaboxHOC = () => {
   const { initialStateLoaded, metaboxSettings: { metabox_type } } = useMetaboxContext();
