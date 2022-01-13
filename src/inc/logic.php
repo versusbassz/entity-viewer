@@ -119,7 +119,7 @@ function get_meta_id_column_for_entity(string $entity_name): string
  */
 function get_metabox_title_for_entity(string $entity_name): string
 {
-    return (string) __('Entity viewer', 'entity-viewer');
+    return (string) __('Entity viewer 111', 'entity-viewer');
 }
 
 function get_refreshing_nonce_name(string $entity_name, int $item_id): string
