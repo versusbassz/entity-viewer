@@ -34,7 +34,7 @@ function vsm_start_plugin() {
         return;
     }
 
-    add_action('admin_init', 'vsm_init_plugin');
+    add_action('init', 'vsm_init_plugin');
 }
 
 function vsm_display_php_requirement_notice() {

@@ -4,7 +4,7 @@ use function VsEntityViewer\is_plugin_allowed;
 
 defined('ABSPATH') || exit;
 
-if (! is_admin() || ! is_plugin_allowed(get_current_user_id())) {
+if (! defined('WP_CLI') && ! is_plugin_allowed(get_current_user_id())) {
     return;
 }
 
