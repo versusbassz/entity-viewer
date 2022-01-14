@@ -1,5 +1,5 @@
-default:
-	echo "There is no default task"
+jjj:
+	@ echo "There is no default task"
 
 build-dev:
 	composer install
