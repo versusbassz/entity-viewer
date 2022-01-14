@@ -29,20 +29,22 @@ release:
 	cd ./dist && zip -r entity-viewer.zip entity-viewer
 
 ## Development environment
-full-install-dev-env:
+
+### Setup
+dev-env--up:
 	make wp-core-download
-	make download-dev-env
+	make dev-env--download
 	cd ./custom/dev-env && make up
 	@ echo "\nWaiting for mysql..."
 	sleep 5
-	make install-dev-env
+	make dev-env--install
 
 wp-core-download:
 	rm -rf ./custom/wp-core
 	git clone --depth=1 --branch=5.7.2 git@github.com:WordPress/WordPress.git ./custom/wp-core
 	rm -rf ./custom/wp-core/.git
 
-download-dev-env:
+dev-env--download:
 	rm -fr ./custom/dev-env && \
 	mkdir -p ./custom/dev-env && \
 	cd ./custom/dev-env && \
@@ -52,7 +54,24 @@ download-dev-env:
 	cp ../../tools/dev-env/.env . && \
 	cp ../../tools/dev-env/wp-config.php ../wp-core/
 
-install-dev-env:
+dev-env--install:
 	cd ./custom/dev-env && \
 	make wp 'core install --url="http://ev.docker.localhost:8000/" --title="Test site" --admin_user="admin" --admin_password="admin" --admin_email="admin@example.org" --skip-email' && \
 	make wp 'plugin activate entity-viewer'
+
+### Regular commands
+dev-env--start:
+	cd ./custom/dev-env && make start
+
+dev-env--stop:
+	cd ./custom/dev-env && make stop
+
+dev-env--prune:
+	cd ./custom/dev-env && make prune
+
+dev-env--restart:
+	cd ./custom/dev-env && make stop
+	cd ./custom/dev-env && make start
+
+dev-env--shell:
+	cd ./custom/dev-env && make shell
