@@ -5,6 +5,7 @@
 /dist
 
 /vendor
+composer.lock
 /node_modules
 
 /assets/build
