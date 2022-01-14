@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 - Critical, Requirements - Update required PHP version: 7.3+ -> 7.4+
+- Critical, Requirements - Update minimal required WordPress core version: 5.6.4 -> 5.7.0
 
 ## 0.2.1
 

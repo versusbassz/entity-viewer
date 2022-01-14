@@ -2,7 +2,7 @@
 /*
 Plugin name: Entity viewer
 Version: 0.3.0-alpha
-Requires at least: 5.6.4
+Requires at least: 5.7.0
 Requires PHP: 7.4
 Text Domain: entity-viewer
 
@@ -24,7 +24,7 @@ function vsm_start_plugin() {
     }
 
     global $wp_version;
-    $supported_wp_version = version_compare($wp_version, '5.6.4', '>=');
+    $supported_wp_version = version_compare($wp_version, '5.7.0', '>=');
 
     if (! $supported_wp_version) {
         add_action('admin_notices', 'vsm_display_wp_core_requirement_notice');
