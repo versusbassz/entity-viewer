@@ -3,7 +3,7 @@
 Plugin name: Entity viewer
 Version: 0.3.0-alpha
 Requires at least: 5.6.4
-Requires PHP: 7.3
+Requires PHP: 7.4
 Text Domain: entity-viewer
 
 Global PHP prefix: vsm
@@ -17,7 +17,7 @@ define('ENTITY_VIEWER_ENTRY_FILE_PATH', __FILE__);
 vsm_start_plugin();
 
 function vsm_start_plugin() {
-    $supported_php_version = version_compare(PHP_VERSION, '7.3.0', '>=');
+    $supported_php_version = version_compare(PHP_VERSION, '7.4.0', '>=');
 
     if (! $supported_php_version) {
         add_action('admin_notices', 'vsm_display_php_requirement_notice');

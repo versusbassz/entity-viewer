@@ -1,5 +1,8 @@
 # Changelog (Entity Viewer)
 
+## [Unreleased]
+- Critical, Requirements - Update required PHP version: 7.3+ -> 7.4+
+
 ## 0.2.1
 
 Release date: 2021-06-27  
