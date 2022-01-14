@@ -13,5 +13,8 @@ A WordPress plugin. Displays custom fields of WordPress entities (posts, users, 
 - [Roadmap](https://github.com/versusbassz/entity-viewer/milestones?direction=asc&sort=title&state=open)
 - [Changelog](https://github.com/versusbassz/entity-viewer/blob/main/CHANGELOG.md)
 
+## Versioning and stability
+The project follows https://semver.org/
+
 ## License
 The license of the project is GPL v2 (or later)
