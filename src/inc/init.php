@@ -1,5 +1,7 @@
 <?php
 
+use VsEntityViewer\Fixture\TestDataGenerator;
+
 use function VsEntityViewer\is_plugin_allowed;
 
 defined('ABSPATH') || exit;
@@ -12,6 +14,10 @@ if (! defined('WP_CLI') && ! is_plugin_allowed(get_current_user_id())) {
 if (wp_doing_ajax()) {
     add_action('wp_ajax_vsm_refresh_data', '\\VsEntityViewer\\handle_refreshing_data_via_ajax');
     return;
+}
+
+if (defined('WP_CLI')) {
+    TestDataGenerator::init();
 }
 
 if (! apply_filters('vsm/is_i18n_enabled', true)) {

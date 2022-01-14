@@ -57,7 +57,8 @@ dev-env--download:
 dev-env--install:
 	cd ./custom/dev-env && \
 	make wp 'core install --url="http://ev.docker.localhost:8000/" --title="Test site" --admin_user="admin" --admin_password="admin" --admin_email="admin@example.org" --skip-email' && \
-	make wp 'plugin activate entity-viewer'
+	make wp 'plugin activate entity-viewer' && \
+	make wp 'ev test-data remove' && make wp 'ev test-data generate'
 
 ### Regular commands
 dev-env--start:
