@@ -5,6 +5,7 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "lucatume/wp-browser": "^3.0"
+        "lucatume/wp-browser": "^3.0",
+        "symfony/var-dumper": "^5.4"
     }
 }
