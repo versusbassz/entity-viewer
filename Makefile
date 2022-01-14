@@ -2,6 +2,7 @@ default:
 	echo "There is no default task"
 
 build-dev:
+	composer install
 	npm ci
 	npx webpack --mode=development --watch --progress
 
