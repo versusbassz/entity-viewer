@@ -18,9 +18,20 @@
  * @package WordPress
  */
 
+$is_test_env = getenv( 'XXX_ENV' ) === 'test';
+
+$ev_test_domain = 'test.ev.docker.local';
+
+// It's necessary for e2e tests,
+// without this action WP-core redirects internal (port=80) selenuim requests to the port 8000
+if ( $is_test_env && isset( $_SERVER['HTTP_HOST'] ) && $_SERVER['HTTP_HOST'] === $ev_test_domain ) {
+    define( 'WP_HOME', 'http://' . $ev_test_domain );
+    define( 'WP_SITEURL', 'http://' . $ev_test_domain );
+}
+
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'wordpress' );
+define( 'DB_NAME', $is_test_env ? 'wordpress_test' : 'wordpress' );
 
 /** MySQL database username */
 define( 'DB_USER', 'wordpress' );
@@ -63,7 +74,7 @@ define('NONCE_SALT',       '9lf0ofA}.7-U0G^Lfv! oI~zf+J?>66N+q|v?VMCF/dTS<~eR3yX
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix = 'wp_';
+$table_prefix = $is_test_env ? 'test_' : 'wp_';
 
 /**
  * For developers: WordPress debugging mode.

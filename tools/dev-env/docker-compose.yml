@@ -10,6 +10,8 @@ services:
       MYSQL_DATABASE: $DB_NAME
       MYSQL_USER: $DB_USER
       MYSQL_PASSWORD: $DB_PASSWORD
+    ports:
+      - "8001:3306"
 #    volumes:
 #    - ./mariadb-init:/docker-entrypoint-initdb.d # Place init .sql file(s) here.
 #    - /path/to/mariadb/data/on/host:/var/lib/mysql # I want to manage volumes manually.
@@ -25,6 +27,7 @@ services:
       DB_NAME: $DB_NAME
       PHP_FPM_USER: wodby
       PHP_FPM_GROUP: wodby
+      XXX_ENV: development
 #      # Read instructions at https://wodby.com/docs/stacks/wordpress/local#xdebug
 #      PHP_XDEBUG: 1
 #      PHP_XDEBUG_MODE: debug
@@ -37,6 +40,7 @@ services:
     volumes:
     - ../wp-core/:/var/www/html:cached
     - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
+    - ../../tools/wp-plugins/:/var/www/html/wp-content/mu-plugins:cached
 ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
 #    - wordpress:/var/www/html
 #    # For XHProf and Xdebug profiler traces
@@ -51,6 +55,7 @@ services:
     volumes:
     - ../wp-core/:/var/www/html:cached
     - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
+    - ../../tools/wp-plugins/:/var/www/html/wp-content/mu-plugins:cached
 ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
 #    - wordpress:/var/www/html
 
@@ -68,10 +73,74 @@ services:
     volumes:
     - ../wp-core/:/var/www/html:cached
     - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
+    - ../../tools/wp-plugins/:/var/www/html/wp-content/mu-plugins:cached
 ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
 #    - wordpress:/var/www/html
     labels:
     - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
+
+  test_php:
+    image: wodby/wordpress-php:$PHP_TAG
+    container_name: "${PROJECT_NAME}_test_php"
+    environment:
+      PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
+      DB_HOST: $DB_HOST
+      DB_USER: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+      DB_NAME: $DB_NAME_TEST
+      PHP_FPM_USER: wodby
+      PHP_FPM_GROUP: wodby
+      XXX_ENV: test
+    #      # Read instructions at https://wodby.com/docs/stacks/wordpress/local#xdebug
+    #      PHP_XDEBUG: 1
+    #      PHP_XDEBUG_MODE: debug
+    #      PHP_IDE_CONFIG: serverName=my-ide
+    #      PHP_XDEBUG_IDEKEY: "my-ide"
+    #      PHP_XDEBUG_CLIENT_HOST: 172.17.0.1 # Linux
+    #      PHP_XDEBUG_CLIENT_HOST: host.docker.internal # Docker 18.03+ Mac/Win
+    #      PHP_XDEBUG_CLIENT_HOST: 10.0.75.1 # Windows
+    #      PHP_XDEBUG_LOG: /tmp/php-xdebug.log
+    volumes:
+      - ../wp-core/:/var/www/html:cached
+      - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
+      - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
+      - ../../:/project/:cached
+  ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
+  #    - wordpress:/var/www/html
+  #    # For XHProf and Xdebug profiler traces
+  #    - files:/mnt/files
+
+  test_nginx:
+    image: wodby/nginx:$NGINX_TAG
+    container_name: "${PROJECT_NAME}_test_nginx"
+    depends_on:
+      - test_php
+    environment:
+      NGINX_STATIC_OPEN_FILE_CACHE: "off"
+      NGINX_ERROR_LOG_LEVEL: debug
+      NGINX_BACKEND_HOST: test_php
+      NGINX_VHOST_PRESET: wordpress
+      #NGINX_SERVER_ROOT: /var/www/html/subdir
+    volumes:
+      - ../wp-core/:/var/www/html:cached
+      - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
+      - ../../tools/wp-plugins/:/var/www/html/wp-content/mu-plugins:cached
+    ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
+    #    - wordpress:/var/www/html
+    labels:
+      - "traefik.http.routers.${PROJECT_NAME}_test_nginx.rule=Host(`test.ev.docker.local`)"
+    networks:
+      default:
+        aliases:
+          - test.ev.docker.local
+
+  selenium:
+    image: selenium/standalone-chrome:4.1.1-20211217
+    container_name: "${PROJECT_NAME}_selenium"
+    ports:
+      - "4444:4444" # selenium
+      - "5900:5900" # vnc
+    shm_size: "2gb"
 
   mailhog:
     image: mailhog/mailhog

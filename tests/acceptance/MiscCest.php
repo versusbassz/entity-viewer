@@ -3,30 +3,24 @@ use Codeception\Util\HttpCode;
 
 class MiscCest
 {
-    public function testHome(AcceptanceTester $I)
+    public function testFrontendAvailable(AcceptanceTester $I)
     {
         $I->amOnPage('/');
-        $I->seeResponseCodeIs(HttpCode::OK);
         $I->see('Just another WordPress site');
-        $I->seeInSource('</html>');
-        $I->see('Just another WordPress site', '.site-description');
-        $I->seeClosedHtmlTag();
     }
 
-    public function testLogin(AcceptanceTester $I)
+    public function testAdminPanelAvailable(AcceptanceTester $I)
     {
-        $I->amOnPage('/wp-login.php');
-        $I->fillField('#loginform #user_login', 'admin');
-        $I->fillField('#loginform #user_pass', 'admin');
-        $I->submitForm('#loginform', []);
-
+        $I->loginAsAdmin();
         $I->see('Dashboard');
+    }
 
+    public function testPostMetabox(AcceptanceTester $I)
+    {
+        $I->loginAsAdmin();
+        $I->amOnPage('/wp-admin/post.php?post=1&action=edit');
 
-        $I->amOnPage('/wp/wp-admin/post.php?post=1&action=edit');
-
-        $I->seeElement('#vsmt-post-meta');
-        $I->seeElement('.js-entity-viewer-data');
-        $I->dontSeeElement('.js-entity-viewer-metabox');
+        $I->waitForElement('#vsm-post-meta', 1); // The root metabox
+        $I->waitForElement('.vsm-refresh', 3); // "Refresh" button
     }
 }
