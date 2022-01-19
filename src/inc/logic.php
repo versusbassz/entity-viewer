@@ -187,7 +187,7 @@ function render_metabox(array $data): void
 function render_hidden_input($id, $data): string
 {
     return sprintf(
-        '<input type="hidden" id="%s" style="display: none !important;" value="%s"></div>' . PHP_EOL,
+        '<input type="hidden" id="%s" style="display: none !important;" value="%s" />' . PHP_EOL,
         esc_attr($id),
         esc_attr(json_encode($data))
     );
