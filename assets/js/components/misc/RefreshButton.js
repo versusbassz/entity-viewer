@@ -32,7 +32,7 @@ export const RefreshButton = ({ refreshFields, fetchedInitial }) => {
     });
 
     return () => unsubscribe();
-  })
+  }, []);
 
   const buttonText = loading ? str("loading") : str("refresh_data");
 
