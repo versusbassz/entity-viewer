@@ -58,10 +58,22 @@ class TestDataGenerator
         $posts = [
             [
                 'post_type' => 'post',
-                'post_title' => 'Test Post - multiple serialized values',
+                'post_title' => 'Test Post - Multiple serialized values',
                 'post_status' => 'publish',
                 'post_author' => $default_user_id,
+                'post_content' => '...',
                 'meta_input' => $meta_fields,
+            ],
+            [
+                'post_type' => 'post',
+                'post_title' => 'Test Post - Spoilers testing',
+                'post_status' => 'publish',
+                'post_author' => $default_user_id,
+                'post_content' => implode(',', range(0,1000)),
+                'meta_input' => array_merge($meta_fields, [
+                    'ev-large-field' => implode(',', range(0,1000)),
+                    'ev-large-field-serialized' => array_fill(0, 20, implode(',', range(0,100))),
+                ]),
             ],
         ];
 

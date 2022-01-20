@@ -46,6 +46,7 @@ function show_metabox(object $item): void
                 'fields_not_found_for_search_query' => esc_html__('There are no meta fields for this search query.', 'entity-viewer'),
                 'see_raw_value' => esc_html__('see the raw value for search results', 'entity-viewer'),
                 'error' => esc_html__('Error', 'entity-viewer'),
+                'close' => esc_html__('Close', 'entity-viewer'),
             ],
         ],
         'metabox' => [

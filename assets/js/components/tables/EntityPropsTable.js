@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 
+import { Spoiler } from "./Spoiler";
 import { SortingArrow } from "./SortingArrow";
 import { CellContent } from "./CellContent";
 import { Quote } from "./Quote";
 import { str } from "../../utils/i18n";
 import { dynamicSort } from "../../utils/sorting";
 import { searchString } from "../../utils/strings";
+import { SPOILER_MIN_LENGTH } from "../../constants";
 
 export const EntityPropsTable = ({ fieldsData, search }) => {
   const [ ui, setUI ] = useState({
@@ -106,28 +108,30 @@ export const EntityPropsTable = ({ fieldsData, search }) => {
             </td>
 
             <td className="vsm-table__column vsm-table__column_type_td vsm-table__column_content_value">
-              {valueType === "pretty" ? (
-                <>
-                  <div className="vsm-value_type_pretty">
-                    <CellContent value={item.value_pretty} search={search} />
+              <Spoiler enabled={item?.value?.length >= SPOILER_MIN_LENGTH}>
+                {valueType === "pretty" ? (
+                  <>
+                    <div className="vsm-value_type_pretty">
+                      <CellContent value={item.value_pretty} search={search} />
+                    </div>
+                    {search && (searchString(search, item.value) && ! searchString(search, item.value_pretty)) && (
+                      <span className="vsm-value-note">* {str("see_raw_value")}</span>
+                    )}
+                  </>
+                ) : (
+                  <div className="vsm-value_type_plain">
+                    {item.value === null ? (
+                      <span className="vsm-null">null</span>
+                    ) : (
+                      <>
+                        <Quote />
+                        <CellContent value={item.value} search={search} />
+                        <Quote />
+                      </>
+                    )}
                   </div>
-                  {search && (searchString(search, item.value) && ! searchString(search, item.value_pretty)) && (
-                    <span className="vsm-value-note">* {str("see_raw_value")}</span>
-                  )}
-                </>
-              ) : (
-                <div className="vsm-value_type_plain">
-                  {item.value === null ? (
-                    <span className="vsm-null">null</span>
-                  ) : (
-                    <>
-                      <Quote />
-                      <CellContent value={item.value} search={search} />
-                      <Quote />
-                    </>
-                  )}
-                </div>
-              )}
+                )}
+              </Spoiler>
             </td>
 
           </tr>
