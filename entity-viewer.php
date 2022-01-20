@@ -1,10 +1,19 @@
 <?php
 /*
 Plugin name: Entity viewer
+Plugin URI: https://github.com/versusbassz/entity-viewer/
+Description: Displays properties and custom fields of WordPress entities (posts, users, terms, comments) for debugging/development purposes.
 Version: 0.3.0-alpha
 Requires at least: 5.7.0
 Requires PHP: 7.4
 Text Domain: entity-viewer
+
+Author: Vladimir Sklyar
+Author URI: https://versusbassz.com/
+
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
 
 Global PHP prefix: vsm
 */
