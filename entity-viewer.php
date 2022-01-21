@@ -27,6 +27,10 @@ define('ENTITY_VIEWER_MIN_WP_VERSION', '5.7.0');
 vsm_start_plugin();
 
 function vsm_start_plugin() {
+    if (! apply_filters('vsm/plugin_enabled', true)) {
+        return;
+    }
+
     $supported_php_version = version_compare(PHP_VERSION, ENTITY_VIEWER_MIN_PHP_VERSION, '>=');
 
     if (! $supported_php_version) {
