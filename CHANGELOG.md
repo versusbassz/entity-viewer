@@ -1,6 +1,14 @@
 # Changelog (Entity Viewer)
 
 ## [Unreleased]
+...
+
+## 0.3.0
+
+Release date: 2022-01-21  
+[Release page](https://github.com/versusbassz/entity-viewer/releases/tag/0.3.0) |
+[Milestone issues](https://github.com/versusbassz/wp-meta-viewer/milestone/3?closed=1)
+
 - Critical - The plugin has been renamed: "Meta viewer" -> "Entity viewer"
 - Critical, Requirements - Update required PHP version: 7.3+ -> 7.4+
 - Critical, Requirements - Update minimal required WordPress core version: 5.6.4 -> 5.7.0
