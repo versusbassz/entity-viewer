@@ -40,7 +40,7 @@ services:
     volumes:
     - ../wp-core/:/var/www/html:cached
     - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
-    - ../../tools/wp-plugins/:/var/www/html/wp-content/mu-plugins:cached
+    - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
 ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
 #    - wordpress:/var/www/html
 #    # For XHProf and Xdebug profiler traces
@@ -55,7 +55,7 @@ services:
     volumes:
     - ../wp-core/:/var/www/html:cached
     - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
-    - ../../tools/wp-plugins/:/var/www/html/wp-content/mu-plugins:cached
+    - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
 ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
 #    - wordpress:/var/www/html
 
@@ -73,7 +73,7 @@ services:
     volumes:
     - ../wp-core/:/var/www/html:cached
     - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
-    - ../../tools/wp-plugins/:/var/www/html/wp-content/mu-plugins:cached
+    - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
 ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
 #    - wordpress:/var/www/html
     labels:
@@ -124,7 +124,7 @@ services:
     volumes:
       - ../wp-core/:/var/www/html:cached
       - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
-      - ../../tools/wp-plugins/:/var/www/html/wp-content/mu-plugins:cached
+      - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
     ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
     #    - wordpress:/var/www/html
     labels:
