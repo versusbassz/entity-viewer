@@ -1,8 +1,27 @@
 # Changelog (Entity Viewer)
 
 ## [Unreleased]
+- Critical - The plugin has been renamed: "Meta viewer" -> "Entity viewer"
 - Critical, Requirements - Update required PHP version: 7.3+ -> 7.4+
 - Critical, Requirements - Update minimal required WordPress core version: 5.6.4 -> 5.7.0
+- New - Display properties of WP entities in the metabox
+- New - Add tabs to metabox to switch visibility of properties and custom fields
+- Enhancement - Add pretty displaying of "null" values
+- Enhancement - Provide a hint for a user if a search query was found in a raw value but wasn't highlighted in a "pretty" value
+- Enhancement - Disable text selection on unnecessary elements
+- Enhancement - Add details to phrases in the admin notices about incompatible PHP/WP versions
+- Misc - Prepare the plugin for release on wordpress.org
+
+- Critical, Security - Allow access to the plugin on Multisite only for the role "Super Admin"
+- Fix - Handle the case of incorrect JSON (syntax error) on AJAX response
+- Fix - Fix non-valid layout of the metabox
+- Fix - Fix unnecessary "subscribe" actions in the logic of compatibility with Gutenberg
+
+- Dev - Rework the initialization logic of the plugin
+- Dev, i18n - Implement i18n support
+- New, Dev - Add "vsm/plugin_enabled", "vsm/is_plugin_allowed", "vsm/is_i18n_enabled" filters
+- Dev - Add an environment for development of the plugin
+- Dev - Add e2e tests
 
 ## 0.2.1
 
