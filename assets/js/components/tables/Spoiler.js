@@ -9,11 +9,9 @@ export const Spoiler = ({children, enabled = false}) => {
   const [opened, setOpened] = useState(false);
 
   const open = () => {
-    console.log("open", opened);
     ! opened && setOpened(true)
   };
   const close = () => {
-    console.log("close", opened);
     opened && setOpened(false);
   }
 
