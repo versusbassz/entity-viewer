@@ -3,7 +3,7 @@ Contributors: versusbassz
 Tags: custom, meta, field, display, metabox, show
 Requires at least: 5.7
 Tested up to: 5.9
-Stable tag: 0.3.0
+Stable tag: 0.3.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -32,6 +32,9 @@ The required role to access the info is `Administrator` for "Single site" mode a
 <a href="https://github.com/versusbassz/entity-viewer/issues/" target="_blank">Github issues</a>
 
 == Changelog ==
+
+= 0.3.1 --- 2022.01.21 =
+* Fix - Remove unnecessary debug output from javascript code
 
 = 0.3.0 --- 2022.01.21 =
 * Critical - The plugin has been renamed: "Meta viewer" -> "Entity viewer"

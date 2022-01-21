@@ -3,6 +3,13 @@
 ## [Unreleased]
 ...
 
+## 0.3.1
+
+Release date: 2022-01-21  
+[Release page](https://github.com/versusbassz/entity-viewer/releases/tag/0.3.1)
+
+Fix - Remove unnecessary debug output from javascript code
+
 ## 0.3.0
 
 Release date: 2022-01-21  
