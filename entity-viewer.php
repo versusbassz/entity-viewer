@@ -13,10 +13,9 @@ Author URI: https://versusbassz.com/
 
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-
-
-Global PHP prefix: vsm
 */
+
+use VsEntityViewer\Plugin;
 
 defined('ABSPATH') || exit;
 
@@ -45,7 +44,13 @@ function vsm_start_plugin() {
         return;
     }
 
-    add_action('init', 'vsm_init_plugin');
+    require_once __DIR__ . '/src/Plugin.php';
+    require_once __DIR__ . '/src/Fixture/TestDataGenerator.php';
+    require_once __DIR__ . '/src/Fetcher/EntityFetcher.php';
+    require_once __DIR__ . '/src/Fetcher/MetaFetcher.php';
+    require_once __DIR__ . '/src/inc/logic.php';
+
+    add_action('init', [Plugin::class, 'init']);
 }
 
 function vsm_display_php_requirement_notice() {
@@ -69,12 +74,4 @@ function vsm_display_admin_notice($message) {
 
     $class = 'notice notice-error is-dismissible';
     printf('<div class="%1$s"><p>%2$s</p></div>', esc_attr($class), esc_html($message));
-}
-
-function vsm_init_plugin() {
-    require_once __DIR__ . '/src/Fixture/TestDataGenerator.php';
-    require_once __DIR__ . '/src/Fetcher/EntityFetcher.php';
-    require_once __DIR__ . '/src/Fetcher/MetaFetcher.php';
-    require_once __DIR__ . '/src/inc/logic.php';
-    require_once __DIR__ . '/src/inc/init.php';
 }
