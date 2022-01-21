@@ -17,15 +17,20 @@ release:
 	rm -rf ./dist/*
 
 	mkdir -p ./dist/entity-viewer
-	mkdir -p ./dist/entity-viewer/assets
 
-	cp ./README.md       ./dist/entity-viewer/
+	cp -r ./assets ./dist/entity-viewer/
+
+	cp ./package.json      ./dist/entity-viewer/
+	cp ./package-lock.json ./dist/entity-viewer/
+	cp ./webpack.config.js ./dist/entity-viewer/
+
+	cp ./README.md  ./dist/entity-viewer/
+	cp ./readme.txt ./dist/entity-viewer/
+	cp ./LICENSE    ./dist/entity-viewer/
+
 	cp ./entity-viewer.php ./dist/entity-viewer/
-
-	cp -r ./assets/build ./dist/entity-viewer/assets
-
-	cp -r ./inc ./dist/entity-viewer/
 	cp -r ./src ./dist/entity-viewer/
+
 	cd ./dist && zip -r entity-viewer.zip entity-viewer
 
 ## Tests
