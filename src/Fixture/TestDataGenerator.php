@@ -11,6 +11,7 @@ use WP_Comment;
 
 /**
  * Generates data (posts, users, etc.) for local development environment (dev-env)
+ * It's not initialized on env=production
  */
 class TestDataGenerator
 {
@@ -85,7 +86,7 @@ class TestDataGenerator
             if (is_wp_error($insert_result)) {
                 WP_CLI::error(var_export($insert_result, true));
             } else {
-                WP_CLI::log(sprintf("Added item: post, %s", $insert_result));
+                WP_CLI::log(sprintf(__('Added item: post, %s', 'entity-viewer'), $insert_result));
             }
         }
 
@@ -103,11 +104,11 @@ class TestDataGenerator
             if (is_wp_error($insert_result)) {
                 WP_CLI::error(var_export($insert_result, true));
             } else {
-                WP_CLI::log(sprintf("Added item: comment, %s", $insert_result));
+                WP_CLI::log(sprintf(__('Added item: comment, %s', 'entity-viewer'), $insert_result));
             }
         }
 
-        WP_CLI::success('Command finished');
+        WP_CLI::success(__('Command finished', 'entity-viewer'));
     }
 
     /**
@@ -133,10 +134,10 @@ class TestDataGenerator
             $deletion_result = wp_delete_post($post->ID, true);
 
             if (! $deletion_result instanceof WP_Post) {
-                WP_CLI::log(sprintf('Error on deleting post #%d', $post->ID));
+                WP_CLI::log(sprintf(__('Error on deleting post #%d', 'entity-viewer'), $post->ID));
                 WP_CLI::error(var_export($deletion_result, true));
             } else {
-                WP_CLI::log(sprintf("Removed item: post, %s", $post->ID));
+                WP_CLI::log(sprintf(__('Removed item: post, %s', 'entity-viewer'), $post->ID));
             }
         }
 
@@ -151,13 +152,13 @@ class TestDataGenerator
             $deletion_result = wp_delete_comment($comment_id, true);
 
             if (! $deletion_result ) {
-                WP_CLI::log(sprintf('Error on deleting comment #%d', $comment_id));
+                WP_CLI::log(sprintf(__('Error on deleting comment #%d', 'entity-viewer'), $comment_id));
                 WP_CLI::error(var_export($deletion_result, true));
             } else {
-                WP_CLI::log(sprintf("Removed item: comment, %s", $comment_id));
+                WP_CLI::log(sprintf(__('Removed item: comment, %s', 'entity-viewer'), $comment_id));
             }
         }
 
-        WP_CLI::success('Command finished');
+        WP_CLI::success(__('Command finished', 'entity-viewer'));
     }
 }
