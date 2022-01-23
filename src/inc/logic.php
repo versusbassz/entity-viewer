@@ -147,22 +147,21 @@ function handle_refreshing_data_via_ajax(): void
         $send_response(new WP_Error("access_restricted", esc_html__("Access restricted.", 'entity-viewer')), 403);
     }
 
-    $args = $_GET;
-
     $valid_entities = ['post', 'term', 'user', 'comment'];
 
-    if (! isset($args['entity']) || ! in_array($args['entity'], $valid_entities) ) {
+    if (! isset($_GET['entity']) || ! in_array($_GET['entity'], $valid_entities) ) {
         $send_response(new WP_Error("invalid_param", esc_html__("Invalid parameter: entity", 'entity-viewer')), 400);
     }
 
-    if (! isset($args['id']) || ! is_numeric($args['id'])) {
+    if (! isset($_GET['id']) || ! is_numeric($_GET['id'])) {
         $send_response(new WP_Error("invalid_param", esc_html__("Invalid parameter: id", 'entity-viewer')), 400);
     }
 
-    $entity_name = $args['entity'];
-    $item_id = absint($args['id']);
+    $entity_name = sanitize_text_field($_GET['entity']);
+    $item_id = absint($_GET['id']);
+    $nonce = isset($_GET['nonce']) ? sanitize_text_field($_GET['nonce']) : '';
 
-    if (! wp_verify_nonce($args['nonce'], get_refreshing_nonce_name($entity_name, $item_id))) {
+    if (! wp_verify_nonce($nonce, get_refreshing_nonce_name($entity_name, $item_id))) {
         $send_response(new WP_Error("nonce_verification_failed", esc_html__("Nonce verification failed", 'entity-viewer')), 403);
     }
 
