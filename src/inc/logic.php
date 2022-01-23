@@ -312,7 +312,7 @@ function is_plugin_allowed(int $user_id): bool
 {
     $capability = is_multisite() ? 'manage_sites' : 'create_users';
     $allowed = user_can($user_id, $capability);
-    $allowed_filtered = apply_filters('vsm/is_plugin_allowed', $allowed, $user_id);
+    $allowed_filtered = apply_filters('entview/is_plugin_allowed', $allowed, $user_id);
 
     return $allowed_filtered;
 }

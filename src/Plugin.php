@@ -23,7 +23,7 @@ class Plugin
         }
 
         // i18n
-        if (! apply_filters('vsm/is_i18n_enabled', true)) {
+        if (! apply_filters('entview/is_i18n_enabled', true)) {
             add_filter('override_load_textdomain', '\\VsEntityViewer\\disable_i18n_for_plugin', 10, 3);
         }
 
