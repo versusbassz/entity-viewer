@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace VsEntityViewer\Fetcher;
+namespace Versusbassz\EntityViewer\Fetcher;
 
 use WP_Error;
-use function VsEntityViewer\construct_meta_data_mapper;
-use function VsEntityViewer\get_meta_id_column_for_entity;
+use function Versusbassz\EntityViewer\construct_meta_data_mapper;
+use function Versusbassz\EntityViewer\get_meta_id_column_for_entity;
 
 class MetaFetcher
 {

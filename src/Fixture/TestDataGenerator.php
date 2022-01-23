@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace VsEntityViewer\Fixture;
+namespace Versusbassz\EntityViewer\Fixture;
 
 use Exception;
 use WP_CLI;

@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace VsEntityViewer\Fetcher;
+namespace Versusbassz\EntityViewer\Fetcher;
 
 use WP_Error;
-use function VsEntityViewer\get_id_property_for_entity;
+use function Versusbassz\EntityViewer\get_id_property_for_entity;
 
 class EntityFetcher
 {

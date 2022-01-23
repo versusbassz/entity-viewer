@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace VsEntityViewer;
+namespace Versusbassz\EntityViewer;
 
 use WP_Error;
-use VsEntityViewer\Fetcher\EntityFetcher;
-use VsEntityViewer\Fetcher\MetaFetcher;
+use Versusbassz\EntityViewer\Fetcher\EntityFetcher;
+use Versusbassz\EntityViewer\Fetcher\MetaFetcher;
 
 defined('ABSPATH') || exit;
 
@@ -175,7 +175,7 @@ function handle_refreshing_data_via_ajax(): void
 
 function render_metabox(array $data): void
 {
-    add_action('admin_footer', '\\VsEntityViewer\\render_metabox_scripts', 200);
+    add_action('admin_footer', '\\Versusbassz\\EntityViewer\\render_metabox_scripts', 200);
 
     echo '<div id="js-vsm-metabox"></div>' . PHP_EOL;
     echo render_hidden_input('js-vsm-tabs-data', [
@@ -206,7 +206,7 @@ function register_post_meta_box($post_type): void
     add_meta_box(
         'vsm-post-meta',
         get_metabox_title_for_entity('post'),
-        '\\VsEntityViewer\\show_metabox',
+        '\\Versusbassz\\EntityViewer\\show_metabox',
         $typenow,
         'normal'
     );
@@ -217,7 +217,7 @@ function register_comment_meta_box(): void
     add_meta_box(
         'vsm-comment-meta',
         get_metabox_title_for_entity('comment'),
-        '\\VsEntityViewer\\show_metabox',
+        '\\Versusbassz\\EntityViewer\\show_metabox',
         'comment',
         'normal' // context required!
     );
@@ -236,7 +236,7 @@ function register_term_meta_box(): void
     global $pagenow, $taxnow;
 
     if ($pagenow === 'term.php' && $taxnow) {
-        add_action("{$taxnow}_edit_form", '\\VsEntityViewer\\show_metabox', 1000, 2);
+        add_action("{$taxnow}_edit_form", '\\Versusbassz\\EntityViewer\\show_metabox', 1000, 2);
     }
 }
 
