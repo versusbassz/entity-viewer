@@ -3,7 +3,7 @@ Contributors: versusbassz
 Tags: custom, meta, field, display, metabox, show
 Requires at least: 5.7
 Tested up to: 5.9
-Stable tag: 0.3.1
+Stable tag: 0.4.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -32,6 +32,12 @@ The required role to access the info is `Administrator` for "Single site" mode a
 <a href="https://github.com/versusbassz/entity-viewer/issues/" target="_blank">Github issues</a>
 
 == Changelog ==
+
+= 0.4.0 --- 2022.01.23 =
+* Breaking changes - Change the prefix of PHP-functions (of the plugin) in the global namespace: vsm_ -> entview_
+* Breaking changes - Change the prefix of PHP-WP-filters of the plugin: vsm/ -> entview/
+* Breaking changes - Change the PHP namespace of the plugin: VsEntityViewer -> Versusbassz\EntityViewer
+* Fix - the issues that were sent by wp.org moderation team on the plugin submission to the wp.org plugins repo
 
 = 0.3.1 --- 2022.01.21 =
 * Fix - Remove unnecessary debug output from javascript code

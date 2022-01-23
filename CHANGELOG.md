@@ -3,6 +3,17 @@
 ## [Unreleased]
 ...
 
+## 0.4.0
+
+Release date: 2022-01-23  
+[Release page](https://github.com/versusbassz/entity-viewer/releases/tag/0.4.0) |
+[Milestone issues](https://github.com/versusbassz/wp-meta-viewer/milestone/9?closed=1)
+
+- Breaking changes - Change the prefix of PHP-functions (of the plugin) in the global namespace: vsm_ -> entview_
+- Breaking changes - Change the prefix of PHP-WP-filters of the plugin: vsm/ -> entview/
+- Breaking changes - Change the PHP namespace of the plugin: VsEntityViewer -> Versusbassz\EntityViewer
+- Fix - the issues that were sent by wp.org moderation team on the plugin submission to the wp.org plugins repo
+
 ## 0.3.1
 
 Release date: 2022-01-21  
@@ -16,9 +27,9 @@ Release date: 2022-01-21
 [Release page](https://github.com/versusbassz/entity-viewer/releases/tag/0.3.0) |
 [Milestone issues](https://github.com/versusbassz/wp-meta-viewer/milestone/3?closed=1)
 
-- Critical - The plugin has been renamed: "Meta viewer" -> "Entity viewer"
-- Critical, Requirements - Update required PHP version: 7.3+ -> 7.4+
-- Critical, Requirements - Update minimal required WordPress core version: 5.6.4 -> 5.7.0
+- Breaking changes - The plugin has been renamed: "Meta viewer" -> "Entity viewer"
+- Breaking changes, Requirements - Update required PHP version: 7.3+ -> 7.4+
+- Breaking changes, Requirements - Update minimal required WordPress core version: 5.6.4 -> 5.7.0
 - New - Display properties of WP entities in the metabox
 - New - Add tabs to metabox to switch visibility of properties and custom fields
 - New - Support "Multisite" mode
