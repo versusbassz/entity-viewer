@@ -24,7 +24,6 @@ release:
 	cp ./package-lock.json ./dist/entity-viewer/
 	cp ./webpack.config.js ./dist/entity-viewer/
 
-	cp ./README.md  ./dist/entity-viewer/
 	cp ./readme.txt ./dist/entity-viewer/
 	cp ./LICENSE    ./dist/entity-viewer/
 
