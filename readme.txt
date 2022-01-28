@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Entity Viewer ===
 Contributors: versusbassz
 Tags: custom, meta, field, display, metabox, show
 Requires at least: 5.7
