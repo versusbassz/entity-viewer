@@ -3,7 +3,7 @@ Contributors: versusbassz
 Tags: custom, meta, field, display, metabox, show
 Requires at least: 5.7
 Tested up to: 5.9
-Stable tag: 0.4.0
+Stable tag: 0.5.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -28,10 +28,12 @@ The plugin displays the metabox on "edit" pages of supported WordPress entities 
 The required role to access the info is `Administrator` for "Single site" mode and `Super Admin` for "Multisite".
 
 = Links =
-<a href="https://github.com/versusbassz/entity-viewer/" target="_blank">Github repo</a>,
-<a href="https://github.com/versusbassz/entity-viewer/issues/" target="_blank">Github issues</a>
+<a href="https://github.com/versusbassz/entity-viewer/" target="_blank">Github repo</a>, <a href="https://github.com/versusbassz/entity-viewer/issues/" target="_blank">Github issues</a>
 
 == Changelog ==
+
+= 0.5.0 --- 2022.01.29 =
+* Dev - Add the github workflow to do releases on wp.org automatically
 
 = 0.4.0 --- 2022.01.23 =
 * Breaking changes - Change the prefix of PHP-functions (of the plugin) in the global namespace: vsm_ -> entview_

@@ -3,6 +3,14 @@
 ## [Unreleased]
 ...
 
+## 0.5.0
+
+Release date: 2022-01-29  
+[Release page](https://github.com/versusbassz/entity-viewer/releases/tag/0.5.0) |
+[Milestone issues](https://github.com/versusbassz/wp-meta-viewer/milestone/8?closed=1)
+
+- Dev - Add the github workflow to do releases on wp.org automatically
+
 ## 0.4.0
 
 Release date: 2022-01-23  
