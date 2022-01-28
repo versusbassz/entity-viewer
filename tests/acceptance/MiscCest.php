@@ -6,7 +6,8 @@ class MiscCest
     public function testFrontendAvailable(AcceptanceTester $I)
     {
         $I->amOnPage('/');
-        $I->see('Just another WordPress site');
+        $I->see('Hello world!'); // default post title
+        $I->see('Proudly powered by WordPress'); // footer text
     }
 
     public function testAdminPanelAvailable(AcceptanceTester $I)
