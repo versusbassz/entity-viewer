@@ -3,6 +3,13 @@
 ## [Unreleased]
 ...
 
+## 0.5.1
+
+Release date: 2022-01-29  
+[Release page](https://github.com/versusbassz/entity-viewer/releases/tag/0.5.1)
+
+- Dev - Fix "Requires at least" header in the entry PHP-file of the plugin
+
 ## 0.5.0
 
 Release date: 2022-01-29  
