@@ -48,9 +48,9 @@ The required role to access the info is `Administrator` for "Single site" mode a
 * Fix - Remove unnecessary debug output from javascript code
 
 = 0.3.0 --- 2022.01.21 =
-* Critical - The plugin has been renamed: "Meta viewer" -> "Entity viewer"
-* Critical, Requirements - Update required PHP version: 7.3+ -> 7.4+
-* Critical, Requirements - Update minimal required WordPress core version: 5.6.4 -> 5.7.0
+* Breaking changes - The plugin has been renamed: "Meta viewer" -> "Entity viewer"
+* Breaking changes, Requirements - Update required PHP version: 7.3+ -> 7.4+
+* Breaking changes, Requirements - Update minimal required WordPress core version: 5.6.4 -> 5.7.0
 * New - Display properties of WP entities in the metabox
 * New - Add tabs to metabox to switch visibility of properties and custom fields
 * New - Support "Multisite" mode
