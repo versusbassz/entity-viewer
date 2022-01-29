@@ -16,7 +16,7 @@ The plugin displays the metabox on "edit" pages of supported WordPress entities 
 The required role to access the info is `Administrator` for "Single site" mode and `Super Admin` for "Multisite".
 
 ## Links
-- Wordpress.org page (coming soon)
+- Wordpress.org page: https://wordpress.org/plugins/entity-viewer/
 - [Changelog](https://github.com/versusbassz/entity-viewer/blob/main/CHANGELOG.md)
 - [Roadmap](https://github.com/versusbassz/entity-viewer/milestones?direction=asc&sort=title&state=open)
 
