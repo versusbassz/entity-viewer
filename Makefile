@@ -40,9 +40,9 @@ test-e2e:
 
 vnc:
 	# sudo apt-get -y install tigervnc-common
-	# vncpasswd ./tests/.vnc-passwd
+	# vncpasswd ./tests/e2e/.vnc-passwd
 	# password is "secret" (default for Selenium docker-images)
-	vncviewer -passwd ./tests/.vnc-passwd localhost::5900 &
+	vncviewer -passwd ./tests/e2e/.vnc-passwd localhost::5900 &
 
 dev-env--shell-test:
 	cd ./custom/dev-env && docker-compose exec test_php bash

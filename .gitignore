@@ -9,5 +9,7 @@
 
 /assets/build
 
-/tests/_output/*
-/tests/_support/_generated/*
+/tests/e2e/_output/*
+!/tests/e2e/_output/.keep
+/tests/e2e/_support/_generated/*
+!/tests/e2e/_support/_generated/.keep
