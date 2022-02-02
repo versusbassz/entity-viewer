@@ -100,5 +100,8 @@ dev-env--restart:
 	cd ./custom/dev-env && make stop
 	cd ./custom/dev-env && make start
 
+dev-env--recreate:
+	make dev-env--prune && make dev-env--up
+
 dev-env--shell:
 	cd ./custom/dev-env && make shell
