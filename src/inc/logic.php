@@ -263,8 +263,9 @@ function render_metabox_scripts(): void
 function construct_meta_data_mapper(string $meta_id_key, bool & $has_serialized_values): callable
 {
     return function (array $item) use ($meta_id_key, & $has_serialized_values) {
-
         $is_value_serialized = is_serialized($item['meta_value']);
+//        $is_json = is_json($item['meta_value']);
+
         $value_pretty = $is_value_serialized ? var_export(unserialize($item['meta_value']), true) : '';
 
         if ($is_value_serialized) {
@@ -350,4 +351,18 @@ function get_asset_modified_time(string $file_path)
     $ctime = filectime($file_path);
 
     return $mtime > $ctime ? $mtime : $ctime;
+}
+
+
+function is_json(string $str): bool
+{
+    $_str = trim($str);
+
+    if (strpos($_str, '[') !== 0 && strpos($_str, '{') !== 0) {
+        return false;
+    }
+
+    json_decode($_str);
+
+    return json_last_error() === JSON_ERROR_NONE;
 }

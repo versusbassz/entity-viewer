@@ -9,11 +9,17 @@
         "symfony/var-dumper": "^5.4",
         "codeception/module-db": "^1.1",
         "codeception/module-webdriver": "^1.4",
-        "codeception/module-phpbrowser": "^1.0"
+        "codeception/module-phpbrowser": "^1.0",
+        "yoast/phpunit-polyfills": "^1.0"
     },
     "config": {
         "platform": {
             "php": "7.4.0"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Versusbassz\\EntityViewer\\Tests\\": "tests/wpunit/src/"
         }
     }
 }

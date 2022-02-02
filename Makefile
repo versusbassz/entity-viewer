@@ -33,6 +33,10 @@ release:
 	cd ./dist && zip -r entity-viewer.zip entity-viewer
 
 ## Tests
+test-wpunit:
+	cd ./custom/dev-env && \
+	docker-compose exec -w "/project" test_php vendor/bin/phpunit
+
 test-e2e:
 	cd ./custom/dev-env && \
 	docker-compose exec -w "/project" test_php vendor/bin/codecept build && \
@@ -52,6 +56,7 @@ dev-env--shell-test:
 ### Setup
 dev-env--up:
 	make wp-core-download
+	make wp-tests-lib-download
 	make dev-env--download
 	cd ./custom/dev-env && make up
 	@ echo "\nWaiting for mysql..."
@@ -62,6 +67,13 @@ wp-core-download:
 	rm -rf ./custom/wp-core
 	git clone --depth=1 --branch=5.9 git@github.com:WordPress/WordPress.git ./custom/wp-core
 	rm -rf ./custom/wp-core/.git
+
+wp-tests-lib-download:
+	mkdir -p ./custom
+	rm -rf ./custom/wp-tests-lib
+	svn co https://develop.svn.wordpress.org/tags/5.9/tests/phpunit/includes ./custom/wp-tests-lib/includes
+	svn co https://develop.svn.wordpress.org/tags/5.9/tests/phpunit/data     ./custom/wp-tests-lib/data
+	svn co https://develop.svn.wordpress.org/tags/5.9/tests/phpunit/tests    ./custom/wp-tests-lib/tests
 
 dev-env--download:
 	rm -fr ./custom/dev-env && \

@@ -1,0 +1,13 @@
+<phpunit
+    colors="true"
+    bootstrap="tests/wpunit/bootstrap.php"
+    backupGlobals="false"
+>
+    <testsuites>
+
+        <testsuite name="common">
+            <directory>tests/wpunit/src</directory>
+        </testsuite>
+
+    </testsuites>
+</phpunit>
