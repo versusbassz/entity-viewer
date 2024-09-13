@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   mariadb:
     image: wodby/mariadb:$MARIADB_TAG
@@ -20,7 +18,15 @@ services:
     image: wodby/wordpress-php:$PHP_TAG
     container_name: "${PROJECT_NAME}_php"
     environment:
-      PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
+      # By default xdebug extension also disabled.
+      PHP_EXTENSIONS_DISABLE: xhprof,spx
+      PHP_MAIL_MIXED_LF_AND_CRLF: "On"
+      # Mailpit:
+      MSMTP_HOST: mailpit
+      MSMTP_PORT: 1025
+      #      # OpenSMTPD:
+      #      MSMTP_HOST: opensmtpd
+      #      MSMTP_PORT: 25
       DB_HOST: $DB_HOST
       DB_USER: $DB_USER
       DB_PASSWORD: $DB_PASSWORD
@@ -29,18 +35,16 @@ services:
       PHP_FPM_GROUP: wodby
       XXX_ENV: development
 #      # Read instructions at https://wodby.com/docs/stacks/wordpress/local#xdebug
-#      PHP_XDEBUG: 1
 #      PHP_XDEBUG_MODE: debug
+#      PHP_XDEBUG_MODE: profile
+#      PHP_XDEBUG_USE_COMPRESSION: false
 #      PHP_IDE_CONFIG: serverName=my-ide
 #      PHP_XDEBUG_IDEKEY: "my-ide"
-#      PHP_XDEBUG_CLIENT_HOST: 172.17.0.1 # Linux
-#      PHP_XDEBUG_CLIENT_HOST: host.docker.internal # Docker 18.03+ Mac/Win
-#      PHP_XDEBUG_CLIENT_HOST: 10.0.75.1 # Windows
 #      PHP_XDEBUG_LOG: /tmp/php-xdebug.log
     volumes:
-    - ../wp-core/:/var/www/html:cached
-    - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
-    - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
+      - ../wp-core/:/var/www/html:cached
+      - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
+      - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
 ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
 #    - wordpress:/var/www/html
 #    # For XHProf and Xdebug profiler traces
@@ -48,14 +52,15 @@ services:
 
   crond:
     image: wodby/wordpress-php:$PHP_TAG
+    init: true
     container_name: "${PROJECT_NAME}_crond"
     environment:
       CRONTAB: "0 * * * * wp cron event run --due-now --path=/var/www/html"
-    command: sudo -E LD_PRELOAD=/usr/lib/preloadable_libiconv.so crond -f -d 0
+    command: sudo crond -f -d 0
     volumes:
-    - ../wp-core/:/var/www/html:cached
-    - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
-    - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
+      - ../wp-core/:/var/www/html:cached
+      - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
+      - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
 ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
 #    - wordpress:/var/www/html
 
@@ -71,19 +76,28 @@ services:
       NGINX_VHOST_PRESET: wordpress
       #NGINX_SERVER_ROOT: /var/www/html/subdir
     volumes:
-    - ../wp-core/:/var/www/html:cached
-    - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
-    - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
+      - ../wp-core/:/var/www/html:cached
+      - ../../:/var/www/html/wp-content/plugins/entity-viewer:cached
+      - ../../tools/mu-plugins/:/var/www/html/wp-content/mu-plugins:cached
 ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/wordpress/local#docker-for-mac
 #    - wordpress:/var/www/html
     labels:
     - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
 
+
   test_php:
     image: wodby/wordpress-php:$PHP_TAG
     container_name: "${PROJECT_NAME}_test_php"
     environment:
-      PHP_SENDMAIL_PATH: /usr/sbin/sendmail -t -i -S mailhog:1025
+      # By default xdebug extension also disabled.
+      PHP_EXTENSIONS_DISABLE: xhprof,spx
+      PHP_MAIL_MIXED_LF_AND_CRLF: "On"
+      # Mailpit:
+      MSMTP_HOST: mailpit
+      MSMTP_PORT: 1025
+      #      # OpenSMTPD:
+      #      MSMTP_HOST: opensmtpd
+      #      MSMTP_PORT: 25
       DB_HOST: $DB_HOST
       DB_USER: $DB_USER
       DB_PASSWORD: $DB_PASSWORD
@@ -92,13 +106,11 @@ services:
       PHP_FPM_GROUP: wodby
       XXX_ENV: test
     #      # Read instructions at https://wodby.com/docs/stacks/wordpress/local#xdebug
-    #      PHP_XDEBUG: 1
     #      PHP_XDEBUG_MODE: debug
+    #      PHP_XDEBUG_MODE: profile
+    #      PHP_XDEBUG_USE_COMPRESSION: false
     #      PHP_IDE_CONFIG: serverName=my-ide
     #      PHP_XDEBUG_IDEKEY: "my-ide"
-    #      PHP_XDEBUG_CLIENT_HOST: 172.17.0.1 # Linux
-    #      PHP_XDEBUG_CLIENT_HOST: host.docker.internal # Docker 18.03+ Mac/Win
-    #      PHP_XDEBUG_CLIENT_HOST: 10.0.75.1 # Windows
     #      PHP_XDEBUG_LOG: /tmp/php-xdebug.log
     volumes:
       - ../wp-core/:/var/www/html:cached
@@ -129,10 +141,7 @@ services:
     #    - wordpress:/var/www/html
     labels:
       - "traefik.http.routers.${PROJECT_NAME}_test_nginx.rule=Host(`test.ev.docker.local`)"
-    networks:
-      default:
-        aliases:
-          - test.ev.docker.local
+
 
   selenium:
     image: selenium/standalone-chrome:4.1.1-20211217
@@ -142,24 +151,12 @@ services:
       - "5900:5900" # vnc
     shm_size: "2gb"
 
-  mailhog:
-    image: mailhog/mailhog
-    container_name: "${PROJECT_NAME}_mailhog"
+  mailpit:
+    image: axllent/mailpit
+    container_name: "${PROJECT_NAME}_mailpit"
     labels:
-    - "traefik.http.services.${PROJECT_NAME}_mailhog.loadbalancer.server.port=8025"
-    - "traefik.http.routers.${PROJECT_NAME}_mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
-
-#  postgres:
-#    image: wodby/postgres:$POSTGRES_TAG
-#    container_name: "${PROJECT_NAME}_postgres"
-#    stop_grace_period: 30s
-#    environment:
-#      POSTGRES_PASSWORD: $DB_PASSWORD
-#      POSTGRES_DB: $DB_NAME
-#      POSTGRES_USER: $DB_USER
-#    volumes:
-#    - ./postgres-init:/docker-entrypoint-initdb.d # Place init file(s) here.
-#    - /path/to/postgres/data/on/host:/var/lib/postgresql/data # I want to manage volumes manually.
+    - "traefik.http.services.${PROJECT_NAME}_mailpit.loadbalancer.server.port=8025"
+    - "traefik.http.routers.${PROJECT_NAME}_mailpit.rule=Host(`mailpit.${PROJECT_BASE_URL}`)"
 
 #  apache:
 #    image: wodby/apache:$APACHE_TAG
@@ -192,16 +189,15 @@ services:
 #    - "traefik.http.services.${PROJECT_NAME}_varnish.loadbalancer.server.port=6081"
 #    - "traefik.http.routers.${PROJECT_NAME}_varnish.rule=Host(`varnish.${PROJECT_BASE_URL}`)"
 
-#  redis:
-#    container_name: "${PROJECT_NAME}_redis"
-#    image: wodby/redis:$REDIS_TAG
+#  valkey:
+#    container_name: "${PROJECT_NAME}_valkey"
+#    image: wodby/valkey:$VALKEY_TAG
 
 #  adminer:
 #    container_name: "${PROJECT_NAME}_adminer"
 #    image: wodby/adminer:$ADMINER_TAG
+#    init: true
 #    environment:
-##      # For PostgreSQL:
-##      ADMINER_DEFAULT_DB_DRIVER: pgsql
 #      ADMINER_DEFAULT_DB_HOST: $DB_HOST
 #      ADMINER_DEFAULT_DB_NAME: $DB_NAME
 #    labels:
@@ -216,6 +212,7 @@ services:
     - "traefik.http.routers.${PROJECT_NAME}_webgrind.rule=Host(`webgrind.${PROJECT_BASE_URL}`)"
     volumes:
     - files:/mnt/files
+    - ./:/mnt/codebase:cached
 
   pma:
     image: phpmyadmin/phpmyadmin
@@ -229,23 +226,9 @@ services:
     labels:
     - "traefik.http.routers.${PROJECT_NAME}_pma.rule=Host(`pma.${PROJECT_BASE_URL}`)"
 
-#  athenapdf:
-#    image: arachnysdocker/athenapdf-service:$ATHENAPDF_TAG
-#    container_name: "${PROJECT_NAME}_athenapdf"
-#    environment:
-#      WEAVER_AUTH_KEY: weaver-auth-key
-#      WEAVER_ATHENA_CMD: "athenapdf -S"
-#      WEAVER_MAX_WORKERS: 10
-#      WEAVER_MAX_CONVERSION_QUEUE: 50
-#      WEAVER_WORKER_TIMEOUT: 90
-#      WEAVER_CONVERSION_FALLBACK: "false"
-
-#  blackfire:
-#    image: blackfire/blackfire
-#    container_name: "${PROJECT_NAME}_blackfire"
-#    environment:
-#      BLACKFIRE_SERVER_ID: XXXXX
-#      BLACKFIRE_SERVER_TOKEN: YYYYY
+#  gotenberg:
+#    image: gotenberg/gotenberg
+#    container_name: "${PROJECT_NAME}_gotenberg"
 
 #  solr:
 #    image: wodby/solr:$SOLR_TAG
@@ -338,5 +321,5 @@ services:
 volumes:
 ## For macOS users (Mutagen)
 #  wordpress:
-# For Xdebug profiler
+## For Xdebug profiler
   files:
