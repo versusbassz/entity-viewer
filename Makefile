@@ -67,9 +67,9 @@ dev-env--download:
 	rm -fr ./custom/dev-env && \
 	mkdir -p ./custom/dev-env && \
 	cd ./custom/dev-env && \
-	git clone -b 5.4.42 --depth=1 -- git@github.com:wodby/docker4wordpress.git . && \
-	rm ./docker-compose.override.yml && \
-	cp ../../tools/dev-env/docker-compose.yml . && \
+	git clone -b 6.0.16 --depth=1 -- git@github.com:wodby/docker4wordpress.git . && \
+	rm ./compose.override.yml && \
+	cp ../../tools/dev-env/compose.yml . && \
 	cp ../../tools/dev-env/.env . && \
 	cp ../../tools/dev-env/wp-config.php ../wp-core/
 
