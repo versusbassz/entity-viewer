@@ -35,8 +35,8 @@ release:
 ## Tests
 test-e2e:
 	cd ./custom/dev-env && \
-	docker-compose exec -w "/project" test_php vendor/bin/codecept build && \
-	docker-compose exec -w "/project" test_php vendor/bin/codecept run acceptance
+	docker compose exec -w "/project" test_php vendor/bin/codecept build && \
+	docker compose exec -w "/project" test_php vendor/bin/codecept run acceptance
 
 vnc:
 	# sudo apt-get -y install tigervnc-common
@@ -45,7 +45,7 @@ vnc:
 	vncviewer -passwd ./tests/e2e/.vnc-passwd localhost::5900 &
 
 dev-env--shell-test:
-	cd ./custom/dev-env && docker-compose exec test_php bash
+	cd ./custom/dev-env && docker compose exec test_php bash
 
 ## Development environment
 
@@ -79,12 +79,12 @@ dev-env--install:
 	make wp 'plugin activate entity-viewer' && \
 	make wp 'ev test-data remove' && make wp 'ev test-data generate' && \
 	\
-	docker-compose exec mariadb mysql -uroot -ppassword -e "create database wordpress_test;" && \
-	docker-compose exec mariadb mysql -uroot -ppassword -e "GRANT ALL PRIVILEGES ON wordpress_test.* TO 'wordpress'@'%';" && \
-	docker-compose exec test_php wp core install --url="http://test.ev.docker.local:8000/" --title="Testing site" --admin_user="admin" --admin_password="admin" --admin_email="admin@docker.local" --skip-email && \
-	docker-compose exec test_php wp plugin activate entity-viewer && \
-	docker-compose exec test_php wp ev test-data remove && \
-	docker-compose exec test_php wp ev test-data generate
+	docker compose exec mariadb mysql -uroot -ppassword -e "create database wordpress_test;" && \
+	docker compose exec mariadb mysql -uroot -ppassword -e "GRANT ALL PRIVILEGES ON wordpress_test.* TO 'wordpress'@'%';" && \
+	docker compose exec test_php wp core install --url="http://test.ev.docker.local:8000/" --title="Testing site" --admin_user="admin" --admin_password="admin" --admin_email="admin@docker.local" --skip-email && \
+	docker compose exec test_php wp plugin activate entity-viewer && \
+	docker compose exec test_php wp ev test-data remove && \
+	docker compose exec test_php wp ev test-data generate
 
 ### Regular commands
 dev-env--start:
