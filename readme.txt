@@ -1,6 +1,6 @@
 === Entity Viewer ===
 Contributors: versusbassz
-Tags: custom, meta, field, display, metabox, show
+Tags: custom, meta, fields, display, show
 Requires at least: 5.7
 Tested up to: 6.6
 Stable tag: 0.5.2
