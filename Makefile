@@ -1,17 +1,16 @@
 jjj:
 	@ echo "There is no default task"
 
-build-dev:
-	composer install
+front.watch:
 	npm ci
 	npx webpack --mode=development --watch --progress
 
-build-production:
+front.build:
 	npm ci
 	npx webpack --mode=production
 
 release:
-	make build-production
+	make front.build
 
 	mkdir -p ./dist
 	rm -rf ./dist/*
