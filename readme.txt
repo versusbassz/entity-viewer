@@ -2,7 +2,7 @@
 Contributors: versusbassz
 Tags: custom, meta, field, display, metabox, show
 Requires at least: 5.7
-Tested up to: 5.9
+Tested up to: 6.6
 Stable tag: 0.5.1
 Requires PHP: 7.4
 License: GPLv2 or later
