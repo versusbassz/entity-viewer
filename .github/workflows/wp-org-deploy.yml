@@ -24,7 +24,7 @@ jobs:
       - run: git branch -v
 
       # build
-      - run: make build-production
+      - run: make front.build
 
       # release on wp.org
       - name: WordPress Plugin Deploy
