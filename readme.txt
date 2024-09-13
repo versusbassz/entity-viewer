@@ -3,7 +3,7 @@ Contributors: versusbassz
 Tags: custom, meta, field, display, metabox, show
 Requires at least: 5.7
 Tested up to: 6.6
-Stable tag: 0.5.1
+Stable tag: 0.5.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -31,6 +31,10 @@ The required role to access the info is `Administrator` for "Single site" mode a
 <a href="https://github.com/versusbassz/entity-viewer/" target="_blank">Github repo</a>, <a href="https://github.com/versusbassz/entity-viewer/issues/" target="_blank">Github issues</a>
 
 == Changelog ==
+
+= 0.5.2 --- 2024.09.13 =
+* Fix - Fix "regeneratorRuntime is not defined" JS-error
+* Dev - Update "Tested up to" version of WP core: 5.9 -> 6.6
 
 = 0.5.1 --- 2022.01.29 =
 * Dev - Fix "Requires at least" header in the entry PHP-file of the plugin

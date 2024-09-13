@@ -3,7 +3,7 @@
 Plugin name: Entity viewer
 Plugin URI: https://github.com/versusbassz/entity-viewer/
 Description: Displays properties and custom fields of WordPress entities (posts, users, terms, comments) for debugging/development purposes.
-Version: 0.5.1
+Version: 0.5.2
 Requires at least: 5.7
 Requires PHP: 7.4
 Text Domain: entity-viewer
@@ -19,7 +19,7 @@ use Versusbassz\EntityViewer\Plugin;
 
 defined('ABSPATH') || exit;
 
-define('ENTITY_VIEWER_PLUGIN_VERSION',  '0.5.1');
+define('ENTITY_VIEWER_PLUGIN_VERSION',  '0.5.2');
 define('ENTITY_VIEWER_ENTRY_FILE_PATH', __FILE__);
 define('ENTITY_VIEWER_MIN_PHP_VERSION', '7.4.0');
 define('ENTITY_VIEWER_MIN_WP_VERSION', '5.7.0');

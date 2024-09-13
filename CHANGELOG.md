@@ -3,6 +3,14 @@
 ## [Unreleased]
 ...
 
+## 0.5.2
+
+Release date: 2024-09-13  
+[Release page](https://github.com/versusbassz/entity-viewer/releases/tag/0.5.2)
+
+- Fix - Fix "regeneratorRuntime is not defined" JS-error
+- Dev - Update "Tested up to" version of WP core: 5.9 -> 6.6
+
 ## 0.5.1
 
 Release date: 2022-01-29  
